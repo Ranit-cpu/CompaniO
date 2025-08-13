@@ -1,7 +1,15 @@
 import os
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-AVATAR_FOLDER = os.path.join(BASE_DIR, "static", "avatars")
-os.makedirs(AVATAR_FOLDER, exist_ok=True)
+BASE_DIR = Path(__file__).resolve().parent
+UPLOAD_DIR = BASE_DIR / "static" / "uploads"
+GENERATED_DIR = BASE_DIR / "static" / "generated"
+DB_FILE = BASE_DIR.parent / "companio.db"
 
-HOST_URL = "http://127.0.0.1:8000"
+JWT_SECRET = os.environ.get("COMPANIO_JWT_SECRET", "change_this_secret")
+JWT_ALGO = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours
+
+# ensure directories exist
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+os.makedirs(GENERATED_DIR, exist_ok=True)
