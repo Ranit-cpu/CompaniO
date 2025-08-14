@@ -1,0 +1,146 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+.navbar {
+  /* background-color: #3e3838; */
+  /* background: linear-gradient(to right, #030303, #5e4016); */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  color: white;
+  
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "Poppins";
+  font-weight: 300;
+  font-style: normal;
+  color: rgb(216, 146, 16);
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 12px;
+  font-family: "Poppins";
+  font-weight: 300;
+  font-style: normal;
+}
+
+.nav-links a:hover {
+  background-color: #575757;
+  border-radius: 5px;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+  
+}
+
+.auth-buttons a ,
+.auth-buttons button{
+  color: white;
+  /* background-color: #18191a; */
+  background: linear-gradient(to right, #ff5f6d, #ffc371);
+  padding: 8px 14px;
+  text-decoration: none;
+  border-radius: 20px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  border: none;
+}
+
+
+
+.auth-buttons a,
+.auth-buttons button :hover {
+  background-color: #0056b3;
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  display: flex;
+  background-color: #1f1b2e;
+  padding: 0;
+  border-radius: 10px;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Login  */
+
+/* Modal overlay */
+.modal-overlayL {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-contentL {
+  display: flex;
+  background-color: #1f1b2e;
+  padding: 0;
+  border-radius: 10px;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* Close button */
+.close-btnL {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
