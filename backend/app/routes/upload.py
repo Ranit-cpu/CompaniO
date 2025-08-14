@@ -20,8 +20,8 @@ async def upload_photo(
 ):
     # Save uploaded photo
     path = save_upload_file(file)
-    asset_id = str(uuid.uuid4())
-    asset = Asset(id=asset_id, owner_id=owner_id, type="photo", storage_path=path)
+    photo_asset_id = str(uuid.uuid4())
+    asset = Asset(id=photo_asset_id, owner_id=owner_id, type="photo", storage_path=path)
 
     with Session(engine) as s:
         s.add(asset)
@@ -33,9 +33,9 @@ async def upload_photo(
         avatar = Avatar(
             id=avatar_id,
             owner_id=owner_id,
-            photo_asset=asset.id,
+            photo_asset=photo_asset_id,
             model_asset=None,  # This field exists in your model now
-            asset_id=asset_id,
+            asset_id=asset.id,
             status="pending",
             consent_text=consent_text
         )
@@ -48,13 +48,5 @@ async def upload_photo(
     return {
         "avatar_id": avatar_id,
         "status": "pending",
-        "photo_asset_id": asset_id  # Use the asset_id we created instead of asset.id
+        "photo_asset_id": photo_asset_id  # Use the photo_asset_id we created instead of asset.id
     }
-
-# @router.post("/model")
-# async def upload_model(owner_id: int = Form(...), file: UploadFile = File(...)):
-#     path = save_upload_file(file)
-#     asset = Asset(id=str(uuid.uuid4()), owner_id=owner_id, type="model", storage_path=path)
-#     with Session(engine) as s:
-#         s.add(asset); s.commit()
-#     return {"asset_id": asset.id, "path": path}

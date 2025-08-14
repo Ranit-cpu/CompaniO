@@ -1,9 +1,8 @@
 import time
-import uuid
 from sqlmodel import Session, select
 from ..config import DB_FILE
-from ..models.models import Avatar, Asset
-from sqlmodel import create_engine, SQLModel
+from ..models.models import Avatar
+from sqlmodel import create_engine
 from ..services.storage import save_generated_file
 
 # small local engine (synchronous)
