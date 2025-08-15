@@ -1,7 +1,7 @@
 import React,{ useState } from 'react'
 import "./Header.css"; 
 import SignIn from "../SignIn/SignIn.jsx";
-import LogIn from "../LogIn/LogIn.jsx";
+
 
 const Header = () => {
     const [showSignIn, setShowSignIn] = useState(false);
@@ -17,10 +17,9 @@ const Header = () => {
         <a href="#">Know More</a>
       </nav>
       <div className="auth-buttons">
-        {/* // <a href="#">Sign In</a> */}
-        <button  onClick={() => setShowSignIn(true)}>Sign In</button>
-        <button  onClick={() => setShowLogIn(true)}>Log In</button>
-        {/* <a href="#">Login</a> */}
+        
+        <button  onClick={() => setShowSignIn(true)}>Sign Up/LogIn</button>
+        
       </div>
     </header>
 
@@ -38,19 +37,6 @@ const Header = () => {
         </div>
       )}
 
-      {showLogIn && (
-        <div className="modal-overlayL">
-          <div className="modal-contentL">
-            <button
-              className="close-btnL"
-              onClick={() => setShowLogIn(false)}
-            >
-              ✖
-            </button>
-            <LogIn />
-          </div>
-        </div>
-      )}
   </>
   )
 }
