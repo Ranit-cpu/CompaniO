@@ -32,7 +32,7 @@ export default function App() {
 
     try {
       const url = isSignUpView
-        ? "http://localhost:8000/auth/signup" // Change to your backend signup endpoint
+        ? "http://127.0.0.1:8000/auth/signup" // Change to your backend signup endpoint
         : "http://localhost:8000/auth/login"; // Change to your backend login endpoint
 
       const response = await fetch(url, {
