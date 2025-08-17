@@ -1,97 +1,167 @@
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(to bottom, #0D0D0D, #2E0249, #570A57);
-    /* background: linear-gradient(-45deg, #1f1c2c, #928dab, #1f1c2c, #928dab); */
-  background-size: 400% 400%;
-  animation: gradientBG 10s ease infinite;
-  color: white;
-}
-
-/* Background animation */
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.hero {
+.hero-container {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 60px;
-  min-height: 100vh;
-  flex-wrap: wrap;
-}
-
-.hero-text {
-  max-width: 500px;
-}
-
-.hero h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
-  animation: fadeInDown 1.5s ease;
-}
-
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-  animation: fadeIn 2s ease;
-}
-
-.btn {
-  display: inline-block;
-  background: linear-gradient(to right, #ff5f6d, #ffc371);
+  align-items: center;
+  padding: 4rem 6rem;
+  height: 90vh;
+  background: linear-gradient(to bottom, #1a002b, #3a015c);
   color: white;
-  padding: 12px 25px;
-  font-size: 1rem;
-  border-radius: 30px;
-  text-decoration: none;
-  animation: fadeInUp 2s ease;
-  transition: transform 0.2s;
 }
 
-.btn:hover {
+.hero-content {
+  max-width: 50%;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+}
+
+.hero-tagline {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  color: #e0baff;
+}
+
+.get-started-btn {
+  margin-top: 2rem;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  color: white;
+  box-shadow: 0 0 10px #00c6ff;
+  transition: transform 0.2s ease;
+}
+
+.get-started-btn:hover {
   transform: scale(1.05);
 }
 
-/* Floating image */
-.hero-img {
-  max-width: 400px;
-  animation: float 4s ease-in-out infinite;
+/* Robot Styles */
+.robot-wrapper {
+  position: relative;
+  width: 300px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.robot-img {
+  width: 100%;
+  transform: rotate(-5deg);
+  animation: rotateWave 4s infinite ease-in-out;
+}
+
+.hello-bubble {
+  position: absolute;
+  top: -30px;
+  right: 0;
+  background: white;
+  color: black;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+/* Animations */
+@keyframes rotateWave {
+  0%, 100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-15px); }
-}
-
-/* Fade animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    text-align: center;
+  0%, 100% {
+    transform: translateY(0px);
   }
-  .hero-img {
-  max-width: 100%;
-  height: auto;
-  animation: float 4s ease-in-out infinite;
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.robot-wrapper {
+  position: relative;
+  width: 400px; /* Increased size */
+  animation: float 3s ease-in-out infinite;
+  margin-right: 4rem;
 }
 
+.robot-img {
+  width: 100%;
+  transform: rotate(-5deg);
+  animation: rotateWave 4s infinite ease-in-out;
 }
+
+.hello-bubble {
+  position: absolute;
+  top: -30px;
+  right: 0;
+  background: white;
+  color: black;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+.hero-container {
+  position: relative;
+  overflow: hidden;
+}
+
+#tsparticles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0; /* behind content */
+  width: 100%;
+  height: 100%;
+}
+
+.hero-content,
+.robot-wrapper {
+  position: relative;
+  z-index: 1; /* above particles */
+}
+.hero-container {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+  width: 100%;
+}
+
+#tsparticles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-content,
+.robot-wrapper {
+  position: relative;
+  z-index: 1;
+}
+#tsparticles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-content,
+.robot-wrapper {
+  position: relative;
+  z-index: 1; /* Particles must be underneath */
+}
+

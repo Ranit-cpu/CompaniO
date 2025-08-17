@@ -1,32 +1,61 @@
-import React from 'react'
-import "./Hero.css"
-import heroImg from "../../assets/chat_robot.png"; 
-import { Link } from 'react-router-dom';
+import React, { useCallback } from "react";
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
+import { useNavigate } from "react-router-dom";
+import robot from "../../assets/chat_robot.png";
+import "./Hero.css";
+
+
 
 const Hero = () => {
+  const navigate = useNavigate();
+
+  const particlesInit = useCallback(async engine => {
+    await loadFull(engine);
+  }, []);
+
+  const handleStart = () => navigate("/namepage");
+
   return (
-   <section className="hero">
-      <div className="hero-text">
-        <h1>Your Virtual Companion</h1>
-        <p>
-          Chat, explore, and grow with your AI-powered friend. <br />
-          Always there to listen, guide, and make your day brighter.
-        </p>
-        {/* <a href="#" className="btn">Get Started</a> */}
-         <Link to="/NamePage" className="btn">
-        Get Started
-      </Link>
+    <div className="hero-container">
+      <Particles
+        id="tsparticles"
+        init={particlesInit}
+        options={{
+          fullScreen: { enable: true, zIndex: -1 },
+          background: { color: "#0f0f2d" },
+          particles: {
+            number: { value: 25 },
+            shape: {
+              type: "char",
+              character: [
+                { value: "🤖" },
+                { value: "⚙️" },
+                { value: "🔧" },
+                { value: "💡" }
+              ]
+            },
+            color: { value: "#00f6ff" },
+            opacity: { value: 0.8 },
+            size: { value: 20, random: true },
+            move: { enable: true, speed: 1, outModes: { default: "out" } }
+          },
+          detectRetina: true
+        }}
+      />
+
+      <div className="hero-content">
+        <h1 className="hero-title">Your Virtual Companion</h1>
+        <p className="hero-tagline">Your trusted virtual friend, connecting hearts and minds every day.</p>
+        <button className="get-started-btn" onClick={handleStart}>Get Started</button>
       </div>
 
-      <div>
-        <img
-          src={heroImg}
-          alt="Virtual Companion"
-          className="hero-img"
-        />
+      <div className="robot-wrapper">
+        <img src={robot} alt="Robot" className="robot-img" />
+        <div className="hello-bubble">👋 Hello!</div>
       </div>
-    </section>
-  )
-}
+    </div>
+  );
+};
 
-export default Hero
+export default Hero;

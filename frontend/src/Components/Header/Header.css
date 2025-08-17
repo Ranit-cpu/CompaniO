@@ -144,3 +144,108 @@
   color: white;
   cursor: pointer;
 }
+
+/* Existing base styles, you can keep */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #1a002b; /* or whatever your background is */
+  color: white;
+}
+
+/* Update this to space the nav links */
+.nav-links {
+  display: flex;
+  gap: 2rem; /* ← This creates spacing between the links */
+}
+
+/* Optional: Style individual links */
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #ff5e99;
+}
+.logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #00e0ff;
+  text-shadow: 0 0 10px #ff00ff;
+}
+
+.logo-tagline {
+  font-size: 1rem;
+  color: #ffccff;
+  margin-top: -1.5rem;
+  margin-left: 0.3rem;
+}
+
+/* Updated Button */
+.auth-buttons button {
+  background: linear-gradient(to right, #ff5e99, #ff9966);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.auth-buttons button:hover {
+  background: linear-gradient(to right, #ff4e88, #ff8844);
+}
+/* Logo container */
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Logo */
+.logo {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #00e0ff;
+  text-shadow: 0 0 20px #ff00ff, 0 0 40px #00e0ff;
+}
+
+/* Glowing Tagline */
+.logo-tagline {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #eebfff;
+  margin-top: -0.5rem;
+  margin-left: 0.1rem;
+  animation: glowPulse 3s ease-in-out infinite, fadeIn 1.5s ease-in forwards;
+  text-shadow: 0 0 10px #ff66ff, 0 0 20px #cc00cc;
+}
+
+/* Animation Keyframes */
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 10px #ff66ff, 0 0 20px #cc00cc;
+  }
+  50% {
+    text-shadow: 0 0 20px #ff66ff, 0 0 30px #ff00ff;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+

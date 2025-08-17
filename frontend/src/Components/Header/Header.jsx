@@ -10,10 +10,14 @@ const Header = () => {
   return (
     <>
    <header className="navbar">
-      <div className="logo">CompaniO</div>
+      <div className="logo-container">
+  <div className="logo">CompaniO</div>
+  <div className="logo-tagline">Connection beyond words</div>
+</div>
+
       <nav className="nav-links">
-        <a href="#">Home</a>
-        <a href="#">About Us</a>
+        <a href="Hero.jsx">Home</a>
+        <a href="about.jsx">About Us</a>
         <a href="#">Know More</a>
       </nav>
       <div className="auth-buttons">

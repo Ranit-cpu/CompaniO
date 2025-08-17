@@ -1,65 +1,41 @@
-import React, { useEffect, useRef } from 'react';
-import './NamePage.css';
-
-import brainIcon from '../../assets/brain.png';
-import chatIcon from '../../assets/chat.png';
-import robotIcon from '../../assets/robot.png';
-import heartIcon from '../../assets/heart.png';
-import pinBackground from '../../assets/pin.webp';
-// import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import "./NamePage.css";
+import robo2 from "../../assets/robo2.png";
+import bubblemsg2 from "../../assets/bubblemsg2.png";
 
 const NamePage = () => {
-  const bgRef = useRef(null);
-  const inputRef = useRef(null);
-  const placeholderText = "Enter your name";
-  let index = 0;
-
-  useEffect(() => {
-    const typePlaceholder = () => {
-      if (inputRef.current) {
-        inputRef.current.setAttribute("placeholder", placeholderText.substring(0, index));
-        index++;
-        if (index <= placeholderText.length) {
-          setTimeout(typePlaceholder, 100);
-        } else {
-          setTimeout(() => {
-            index = 0;
-            typePlaceholder();
-          }, 2000);
-        }
-      }
-    };
-    typePlaceholder();
-
-    const handleMouseMove = (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 10;
-      const y = (e.clientY / window.innerHeight - 0.5) * 10;
-      if (bgRef.current) {
-        bgRef.current.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  const [gender, setGender] = useState("");
 
   return (
-    <div className="container">
-      <img src={pinBackground} alt="Background" className="background-img" ref={bgRef} />
+    <div className="namepage-container">
+      {/* Floating Bubble Left */}
+      <img src={bubblemsg2} alt="Chat Bubble" className="floating-icon bubble" />
 
-      <img src={chatIcon} className="icon floating fade" style={{ top: '30px', left: '30px' }} alt="Chat" />
-      <img src={robotIcon} className="icon floating fade" style={{ top: '30px', right: '30px' }} alt="Robot" />
-      <img src={brainIcon} className="icon floating fade" style={{ bottom: '30px', left: '30px' }} alt="Brain" />
-      <img src={heartIcon} className="icon floating fade" style={{ bottom: '30px', right: '30px' }} alt="Heart" />
+      {/* Floating Robot Right */}
+      <img src={robo2} alt="Robot" className="floating-icon robot" />
 
-      <div className="content">
-        <h1 className="logo">COMPANIO</h1>
-        <p className="subtitle">Connection Beyond Words</p>
-        <div className="input-group">
-          <label htmlFor="name">Your Name</label>
-          <input id="name" type="text" ref={inputRef} />
+      {/* Center Input Section */}
+      <div className="form-container">
+        <h2 className="input-label">Enter Your Name</h2>
+        <input type="text" placeholder="Enter" className="name-input" />
+
+        {/* Gender Selection */}
+        <div className="gender-container">
+          <button 
+            className={`gender-btn ${gender === "male" ? "active" : ""}`} 
+            onClick={() => setGender("male")}
+          >
+            👦 Male
+          </button>
+          <button 
+            className={`gender-btn ${gender === "female" ? "active" : ""}`} 
+            onClick={() => setGender("female")}
+          >
+            👧 Female
+          </button>
         </div>
-        <button className="btn">Continue</button>
+
+        <button className="continue-btn">Continue</button>
       </div>
     </div>
   );
