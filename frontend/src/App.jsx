@@ -5,6 +5,7 @@ import Home from './Home';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Upload from './Components/Upload/Upload';
 import SignIn from './Components/SignIn/SignIn';
+import NamePage from './Components/NamePage/NamePage';
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
 
           {/* Upload page */}
           <Route path="/upload" element={<Upload />} />
+
+          <Route path="/NamePage" element={<NamePage />} />
         </Routes>
 
        

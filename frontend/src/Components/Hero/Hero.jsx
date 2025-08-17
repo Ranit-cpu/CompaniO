@@ -1,6 +1,6 @@
 import React from 'react'
 import "./Hero.css"
-import heroImg from "../../assets/robot1.png"; 
+import heroImg from "../../assets/chat_robot.png"; 
 import { Link } from 'react-router-dom';
 
 const Hero = () => {
@@ -13,7 +13,7 @@ const Hero = () => {
           Always there to listen, guide, and make your day brighter.
         </p>
         {/* <a href="#" className="btn">Get Started</a> */}
-         <Link to="/upload" className="btn">
+         <Link to="/NamePage" className="btn">
         Get Started
       </Link>
       </div>
