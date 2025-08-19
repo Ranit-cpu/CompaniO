@@ -1,12 +1,11 @@
-
 import React, { useState } from 'react';
 import "./SignIn.css";
 
-export default function App() {
+export default function SignInComponent({ onAuthSuccess, onClose }) {
   const [isSignUpView, setIsSignUpView] = useState(true);
-  const [isVisible, setIsVisible] = useState(true);
 
   // States for form fields
+  const [username, setUsername] = useState("")
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,7 +19,9 @@ export default function App() {
   };
 
   const handleClose = () => {
-    setIsVisible(false);
+    if (onClose) {
+      onClose();
+    }
   };
 
   // Main function to handle Sign Up / Login
@@ -33,14 +34,19 @@ export default function App() {
     try {
       const url = isSignUpView
         ? "http://127.0.0.1:8000/auth/signup" // Change to your backend signup endpoint
-        : "http://localhost:8000/auth/login"; // Change to your backend login endpoint
+        : "http://127.0.0.1:8000/auth/login"; // Change to your backend login endpoint
+
+
+      const payload = isSignUpView
+        ? { username, email, password }
+        : { email, password };
 
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify(payload)
       });
 
       const data = await response.json();
@@ -56,6 +62,14 @@ export default function App() {
         // Save token to localStorage for authentication
         localStorage.setItem("token", data.token);
       }
+
+      // Call the success callback after a short delay to show the success message
+      setTimeout(() => {
+        if (onAuthSuccess) {
+          onAuthSuccess();
+        }
+      }, 1500);
+
     } catch (err) {
       setErrorMsg(err.message);
     } finally {
@@ -63,14 +77,25 @@ export default function App() {
     }
   };
 
-  if (!isVisible) {
-    return null;
-  }
-
   return (
     <div className="page-container">
       <div className="auth-card">
-       
+        {/* Close button */}
+        <button 
+          className="close-btn" 
+          onClick={handleClose}
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '15px',
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            cursor: 'pointer',
+            color: '#666'
+          }}
+        >
+        </button>
 
         <div className="header-section">
           <h1 className="header-title">
@@ -89,6 +114,16 @@ export default function App() {
         {successMsg && <p className="success-message">{successMsg}</p>}
 
         <form className="form-container" onSubmit={handleSubmit}>
+            {isSignUpView && (
+            <input
+              type="text"
+              placeholder="Username"
+              className="input-field"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          )}
           <input
             type="email"
             placeholder="Email"
@@ -136,4 +171,3 @@ export default function App() {
     </div>
   );
 }
-

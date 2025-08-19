@@ -1,6 +1,7 @@
 import React,{ useState } from 'react'
 import "./Header.css"; 
 import SignIn from "../SignIn/SignIn.jsx";
+import { Link } from 'react-router-dom'; 
 
 
 const Header = () => {
@@ -10,16 +11,17 @@ const Header = () => {
   return (
     <>
    <header className="navbar">
-      <div className="logo-container">
-  <div className="logo">CompaniO</div>
-  <div className="logo-tagline">Connection beyond words</div>
-</div>
-
-      <nav className="nav-links">
-        <a href="Hero.jsx">Home</a>
-        <a href="about.jsx">About Us</a>
+      <div className="logo">CompaniO</div>
+      {/* <nav className="nav-links">
+        <a href="#">Home</a>
+        <a href="#">About Us</a>
         <a href="#">Know More</a>
-      </nav>
+      </nav> */}
+       <nav className="nav-links">
+          <Link to="/">Home</Link>        {/* ✅ Goes to Home page */}
+          <Link to="/about">About Us</Link> {/* (you can add this route later) */}
+          <Link to="/know more">Know More</Link> {/* ✅ Goes to Upload page */}
+        </nav>
       <div className="auth-buttons">
         
         <button  onClick={() => setShowSignIn(true)}>Sign Up/LogIn</button>

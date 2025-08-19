@@ -8,6 +8,11 @@ from datetime import datetime, timedelta
 import jwt
 
 class SignupRequest(BaseModel):
+    username:str
+    email: str
+    password: str
+
+class LoginRequest(BaseModel):
     email: str
     password: str
 
@@ -28,6 +33,7 @@ def get_password_hash(password):
 
 @router.post("/signup")
 def signup(payload: SignupRequest):
+    username = payload.username
     email = payload.email
     password = payload.password
 
@@ -35,7 +41,7 @@ def signup(payload: SignupRequest):
         existing = s.exec(select(User).where(User.email == email)).first()
         if existing:
             raise HTTPException(status_code=400, detail="Email already registered")
-        user = User(email=email, password_hash=get_password_hash(password))
+        user = User(username=username, email=email, password_hash=get_password_hash(password))
         s.add(user)
         s.commit()
         s.refresh(user)
@@ -43,7 +49,7 @@ def signup(payload: SignupRequest):
         return {"user": {"id": user.id, "email": user.email}, "token": token}
 
 @router.post("/login")
-def login(payload:SignupRequest):
+def login(payload:LoginRequest):
     email = payload.email
     password = payload.password
 
