@@ -2,7 +2,7 @@ body {
   margin: 0;
   font-family: "Poppins";
   /* background: linear-gradient(-45deg, #000000,#1b0236, #000000, #2d2003,#000000); */
-  background: linear-gradient(-45deg,#100445,#31041a,#0000);
+  background: linear-gradient(-45deg,#100445,#31041a,#0000ff);
     /* background: linear-gradient(-45deg, #1f1c2c, #928dab, #1f1c2c, #928dab); */
   background-size: 400% 400%;
   animation: gradientBG 10s ease infinite;
