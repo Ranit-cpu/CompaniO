@@ -101,7 +101,7 @@ import "./Hero.css";
 import { Link, useNavigate } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, useAnimations, Html } from "@react-three/drei";
-import SignInComponent from "../SignIn/SignIn"; // Import your SignIn component
+import SignInComponent from "../SignIn/SignIn.jsx"; // Import your SignIn component
 
 // 3D Model component for girl with animation
 function RobotModel() {
@@ -147,6 +147,8 @@ function RobotModel1() {
   );
 }
 
+const isLoggedIn = localStorage.getItem("token") ? true : false;
+
 const Hero = () => {
   const [showSignIn, setShowSignIn] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -157,6 +159,8 @@ const Hero = () => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
+
+  
 
   const handleGetStarted = () => {
     console.log("Get Started clicked, isLoggedIn:", isLoggedIn);

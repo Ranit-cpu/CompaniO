@@ -197,7 +197,7 @@ export default function SignInComponent({ onAuthSuccess, onClose }) {
 
     try {
       const url = isSignUpView
-        ? "http://127.0.0.1:8000//auth/signup" // Change to your backend signup endpoint
+        ? "http://127.0.0.1:8000/auth/signup" // Change to your backend signup endpoint
         : "http://127.0.0.1:8000/auth/login"; // Change to your backend login endpoint
 
       // Prepare request body based on view
