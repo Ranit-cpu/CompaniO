@@ -2,7 +2,7 @@ body {
   margin: 0;
   font-family: "Poppins";
   /* background: linear-gradient(-45deg, #000000,#1b0236, #000000, #2d2003,#000000); */
-  background: linear-gradient(-45deg,#100445,#31041a,#0000ff);
+  background: linear-gradient(-45deg,#100445,#31041a,#0000);
     /* background: linear-gradient(-45deg, #1f1c2c, #928dab, #1f1c2c, #928dab); */
   background-size: 400% 400%;
   animation: gradientBG 10s ease infinite;
@@ -129,7 +129,7 @@ body {
 
 }
 /* Modal Overlay Styles */
-.modal-overlay {
+/* .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -152,20 +152,20 @@ body {
   background: white;
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-}
-::-webkit-scrollbar {
+} */
+/* ::-webkit-scrollbar {
   display: none;
-}
-html {
+} */
+/* html {
   scrollbar-width: none;
-}
+} */
 
-.modal-overlay .page-container {
+/* .modal-overlay .page-container {
   margin: 0;
   padding: 0;
   background: transparent;
   min-height: auto;
-}
+} */
 
 /* Close button styles */
 .close-btn {

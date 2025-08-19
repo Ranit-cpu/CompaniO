@@ -1,14 +1,18 @@
 
 
 // import React, { useState, useRef } from 'react';
+// import { useLocation } from 'react-router-dom'; // Import useLocation to access passed state
 // import { UploadCloud, X } from 'lucide-react';
 // import "./Upload.css";
-// import introVideo from "../../assets/avatar2.mp4"; // your video file
+// import introVideo from "../../assets/avatar2.mp4";
 
-// export default function App() {
+// export default function Upload() {
+//   const location = useLocation(); // Get location object
+//   const { userName, userGender } = location.state || {}; // Extract user data from state
+
 //   const [file, setFile] = useState(null);
 //   const [isDragging, setIsDragging] = useState(false);
-//   const [isMuted, setIsMuted] = useState(true); // track mute state
+//   const [isMuted, setIsMuted] = useState(true);
 //   const videoRef = useRef(null);
 
 //   const handleDragOver = (e) => {
@@ -36,7 +40,9 @@
 
 //   const handleUpload = () => {
 //     if (file) {
-//       alert(`Uploading file: ${file.name}`);
+//       // You can now use userName and userGender in your upload logic
+//       alert(`Uploading file: ${file.name} for ${userName} (${userGender})`);
+//       // Your upload logic here...
 //     } else {
 //       alert("Please select a file to upload.");
 //     }
@@ -48,14 +54,13 @@
 //     if (videoRef.current) {
 //       videoRef.current.muted = !isMuted;
 //       setIsMuted(!isMuted);
-//       videoRef.current.play(); // ensure playback resumes
+//       videoRef.current.play();
 //     }
 //   };
 
 //   return (
 //     <div className="upload-page-container">
 //       <div className="upload-card">
-
 //         {/* 🎥 Video section at the top of card */}
 //         <div className="video-section">
 //           <video
@@ -67,15 +72,16 @@
 //             playsInline
 //             className="card-video"
 //           />
-//           {/* Overlay button */}
 //           <button onClick={toggleSound} className="sound-toggle-btn">
 //             {isMuted ? "🔊 Enable Sound" : "🔇 Mute"}
 //           </button>
 //         </div>
 
-//         {/* Header section */}
+//         {/* Header section with personalized greeting */}
 //         <div className="header-section">
-//           <h1 className="main-title">Your Virtual Companion Awaits</h1>
+//           <h1 className="main-title">
+//             {userName ? `Welcome ${userName}!` : 'Your Virtual Companion Awaits'}
+//           </h1>
 //           <p className="upload-prompt">
 //             Upload a photo, and our AI will transform it into your personal humanoid model.
 //           </p>
@@ -122,13 +128,12 @@
 //           )}
 //         </div>
 
-//         {/* Upload button */}
 //         <button
 //           onClick={handleUpload}
 //           className="generate-btn"
 //           disabled={!file}
 //         >
-//           Generate AI Model
+//           Let's Connect
 //         </button>
 //       </div>
 //     </div>
@@ -136,14 +141,15 @@
 // }
 
 import React, { useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom'; // Import useLocation to access passed state
+import { useLocation, useNavigate } from 'react-router-dom'; // ✅ Import useNavigate
 import { UploadCloud, X } from 'lucide-react';
 import "./Upload.css";
 import introVideo from "../../assets/avatar2.mp4";
 
 export default function Upload() {
-  const location = useLocation(); // Get location object
-  const { userName, userGender } = location.state || {}; // Extract user data from state
+  const location = useLocation();
+  const navigate = useNavigate(); // ✅ for navigation
+  const { userName, userGender } = location.state || {};
 
   const [file, setFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -175,9 +181,13 @@ export default function Upload() {
 
   const handleUpload = () => {
     if (file) {
-      // You can now use userName and userGender in your upload logic
-      alert(`Uploading file: ${file.name} for ${userName} (${userGender})`);
-      // Your upload logic here...
+      // ✅ Create object URL for uploaded image
+      const imageURL = URL.createObjectURL(file);
+
+      // ✅ Navigate to Chat.jsx and pass data
+      navigate("/chat", {
+        state: { userName, userGender, uploadedPhoto: imageURL }
+      });
     } else {
       alert("Please select a file to upload.");
     }
@@ -196,7 +206,7 @@ export default function Upload() {
   return (
     <div className="upload-page-container">
       <div className="upload-card">
-        {/* 🎥 Video section at the top of card */}
+        {/* 🎥 Video section */}
         <div className="video-section">
           <video
             ref={videoRef}
@@ -212,7 +222,7 @@ export default function Upload() {
           </button>
         </div>
 
-        {/* Header section with personalized greeting */}
+        {/* Header */}
         <div className="header-section">
           <h1 className="main-title">
             {userName ? `Welcome ${userName}!` : 'Your Virtual Companion Awaits'}
@@ -222,7 +232,7 @@ export default function Upload() {
           </p>
         </div>
 
-        {/* File upload area */}
+        {/* Upload Area */}
         <div
           className={`upload-area ${isDragging ? "dragging" : ""}`}
           onDragOver={handleDragOver}
@@ -263,12 +273,13 @@ export default function Upload() {
           )}
         </div>
 
+        {/* ✅ Button navigates to Chat */}
         <button
           onClick={handleUpload}
           className="generate-btn"
           disabled={!file}
         >
-          Generate AI Model
+          Let's Connect
         </button>
       </div>
     </div>

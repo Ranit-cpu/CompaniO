@@ -30,7 +30,10 @@
           .upload-page-container {
             background-color: #000000;
            /* background: url("https://media.istockphoto.com/id/1432965103/video/neon-flash-light-structures-hi-tech-neon-sci-fi-tunel-trendy-neon-glow-lines-form-pattern-and.jpg?s=640x640&k=20&c=9tpJzfgnVaqrFa6S9HHtUXVRQNKWFGKw34yTyewlZyM="); */
-             background: linear-gradient(to right, #3e346b,#6e284a,#0000);
+           background: linear-gradient(-45deg,#100445,#31041a,#0000);
+    
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
             background-repeat: no-repeat;   /* ✅ prevents repeating */
             background-position: center;    /* ✅ centers the image */
            background-size: cover;         /* ✅ makes it fill the whole screen */
@@ -42,6 +45,13 @@
             padding: 1rem;
             font-family: "Poppins";
           }
+
+          /* Background animation */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
           
 
           /* Main card for the upload UI */
@@ -83,6 +93,7 @@
   width: 70%;
   height: 100%;
   object-fit: cover;
+  border-radius: 200px;
   background-color: #ef4444;
 }
 
@@ -161,8 +172,10 @@
             font-weight: 600;
             transition: all 0.3s ease-in-out;
             /* background-image: linear-gradient(to right, #a855f7, #ec4899); */
-             background-image: linear-gradient(to right, #201f1f, #651fa3);
+             /* background-image: linear-gradient(to right, #201f1f, #651fa3); */
+             background: linear-gradient(to right, #3e346b,#6e284a,#0000);
             color: #ffffff;
+            box-shadow: 5px 5px 5px white;
           }
           
           .browse-btn:hover {
@@ -196,6 +209,7 @@
             padding: 0.25rem;
             border-radius: 9999px;
             transition: all 0.2s ease-in-out;
+            border: none;
           }
           
           .remove-image-btn:hover {
@@ -210,12 +224,15 @@
             border-radius: 9999px;
             font-weight: bold;
             transition: all 0.3s ease-in-out;
-           background-image: linear-gradient(to right, #201f1f, #651fa3);
+           background: linear-gradient(to right, #3e346b,#6e284a,#0000);
+           box-shadow: 5px 10px 5px white;
             color: #ffffff;
+            border: none;
+            cursor: pointer;
           }
           
           .generate-btn:hover {
-            background-image: linear-gradient(to right, #201f1f, #651fa3);
+            /* background-image: linear-gradient(to right, #201f1f, #651fa3); */
             transform: scale(1.02);
           }
           
@@ -246,7 +263,7 @@
   padding: 2rem;
   border-radius: 15px;
   width: 450px;
-  height: 520px;
+  height: 550px;
   color: black;
   position: relative;
 }

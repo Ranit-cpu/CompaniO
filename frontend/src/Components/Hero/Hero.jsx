@@ -1,3 +1,5 @@
+
+
 // import React, { Suspense, useEffect } from "react";
 // import "./Hero.css";
 // import { Link } from "react-router-dom";
@@ -158,7 +160,7 @@ const Hero = () => {
 
   const handleGetStarted = () => {
     console.log("Get Started clicked, isLoggedIn:", isLoggedIn);
-    if (!isLoggedIn) {
+    if (isLoggedIn) {
       // User is logged in, navigate to name page
       navigate("/namepage");
     } else {

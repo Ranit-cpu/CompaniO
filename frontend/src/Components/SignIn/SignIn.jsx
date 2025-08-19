@@ -1,3 +1,163 @@
+
+// import React, { useState } from 'react';
+// import "./SignIn.css";
+
+// export default function SignInComponent({ onAuthSuccess, onClose }) {
+//   const [isSignUpView, setIsSignUpView] = useState(true);
+
+//   // States for form fields
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [loading, setLoading] = useState(false);
+//   const [errorMsg, setErrorMsg] = useState("");
+//   const [successMsg, setSuccessMsg] = useState("");
+
+//   const toggleView = () => {
+//     setIsSignUpView(!isSignUpView);
+//     setErrorMsg("");
+//     setSuccessMsg("");
+//   };
+
+//   const handleClose = () => {
+//     if (onClose) {
+//       onClose();
+//     }
+//   };
+
+//   // Main function to handle Sign Up / Login
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setLoading(true);
+//     setErrorMsg("");
+//     setSuccessMsg("");
+
+//     try {
+//       const url = isSignUpView
+//         ? "http://localhost:5000/api/auth/signup" // Change to your backend signup endpoint
+//         : "http://localhost:5000/api/auth/login"; // Change to your backend login endpoint
+
+//       const response = await fetch(url, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify({ email, password })
+//       });
+
+//       const data = await response.json();
+
+//       if (!response.ok) {
+//         throw new Error(data.message || "Something went wrong");
+//       }
+
+//       // Handle success
+//       setSuccessMsg(isSignUpView ? "Account created successfully!" : "Logged in successfully!");
+
+//       if (!isSignUpView && data.token) {
+//         // Save token to localStorage for authentication
+//         localStorage.setItem("token", data.token);
+//       }
+
+//       // Call the success callback after a short delay to show the success message
+//       setTimeout(() => {
+//         if (onAuthSuccess) {
+//           onAuthSuccess();
+//         }
+//       }, 1500);
+
+//     } catch (err) {
+//       setErrorMsg(err.message);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <div className="page-container">
+//       <div className="auth-card">
+//         {/* Close button */}
+//         <button 
+//           className="close-btn" 
+//           onClick={handleClose}
+//           style={{
+//             position: 'absolute',
+//             top: '10px',
+//             right: '15px',
+//             background: 'none',
+//             border: 'none',
+//             fontSize: '24px',
+//             cursor: 'pointer',
+//             color: '#666'
+//           }}
+//         >
+//           ×
+//         </button>
+
+//         <div className="header-section">
+//           <h1 className="header-title">
+//             {isSignUpView ? "Create an account" : "Welcome Back!"}
+//           </h1>
+//           <p className="header-subtitle">
+//             {isSignUpView ? (
+//               <span>Already have an account? <span onClick={toggleView} className="link">Log in</span></span>
+//             ) : (
+//               <span>Don't have an account? <span onClick={toggleView} className="link">Sign up</span></span>
+//             )}
+//           </p>
+//         </div>
+
+//         {errorMsg && <p className="error-message">{errorMsg}</p>}
+//         {successMsg && <p className="success-message">{successMsg}</p>}
+
+//         <form className="form-container" onSubmit={handleSubmit}>
+//           <input
+//             type="email"
+//             placeholder="Email"
+//             className="input-field"
+//             value={email}
+//             onChange={(e) => setEmail(e.target.value)}
+//             required
+//           />
+//           <input
+//             type="password"
+//             placeholder={isSignUpView ? "Enter your password" : "Password"}
+//             className="input-field"
+//             value={password}
+//             onChange={(e) => setPassword(e.target.value)}
+//             required
+//           />
+
+//           {isSignUpView && (
+//             <div className="checkbox-label">
+//               <input type="checkbox" id="terms" required />
+//               <label htmlFor="terms">
+//                 I agree to the <a href="#" className="link">terms & conditions</a>
+//               </label>
+//             </div>
+//           )}
+
+//           {!isSignUpView && (
+//             <div className="checkbox-label">
+//               <input type="checkbox" id="remember" />
+//               <label htmlFor="remember">Remember me</label>
+//             </div>
+//           )}
+
+//           <button type="submit" className="main-btn" disabled={loading}>
+//             {loading ? "Processing..." : isSignUpView ? "Sign Up" : "Log In"}
+//           </button>
+
+//           {!isSignUpView && (
+//             <p className="header-subtitle" style={{ textAlign: 'center', marginTop: '1rem' }}>
+//               <span className="link">Forgot password?</span>
+//             </p>
+//           )}
+//         </form>
+//       </div>
+//     </div>
+//   );
+// }
+
 import React, { useState } from 'react';
 import "./SignIn.css";
 
@@ -5,7 +165,7 @@ export default function SignInComponent({ onAuthSuccess, onClose }) {
   const [isSignUpView, setIsSignUpView] = useState(true);
 
   // States for form fields
-  const [username, setUsername] = useState("")
+  const [name, setName] = useState(""); // Added name state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,6 +176,10 @@ export default function SignInComponent({ onAuthSuccess, onClose }) {
     setIsSignUpView(!isSignUpView);
     setErrorMsg("");
     setSuccessMsg("");
+    // Clear form fields when switching views
+    setName("");
+    setEmail("");
+    setPassword("");
   };
 
   const handleClose = () => {
@@ -33,20 +197,20 @@ export default function SignInComponent({ onAuthSuccess, onClose }) {
 
     try {
       const url = isSignUpView
-        ? "http://127.0.0.1:8000/auth/signup" // Change to your backend signup endpoint
+        ? "http://127.0.0.1:8000//auth/signup" // Change to your backend signup endpoint
         : "http://127.0.0.1:8000/auth/login"; // Change to your backend login endpoint
 
-
-      const payload = isSignUpView
-        ? { username, email, password }
-        : { email, password };
+      // Prepare request body based on view
+      const requestBody = isSignUpView 
+        ? { name, email, password }  // Include name for signup
+        : { email, password };       // Only email and password for login
 
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(requestBody)
       });
 
       const data = await response.json();
@@ -95,6 +259,7 @@ export default function SignInComponent({ onAuthSuccess, onClose }) {
             color: '#666'
           }}
         >
+          ×
         </button>
 
         <div className="header-section">
@@ -114,16 +279,18 @@ export default function SignInComponent({ onAuthSuccess, onClose }) {
         {successMsg && <p className="success-message">{successMsg}</p>}
 
         <form className="form-container" onSubmit={handleSubmit}>
-            {isSignUpView && (
+          {/* Name field - only show during sign up */}
+          {isSignUpView && (
             <input
               type="text"
-              placeholder="Username"
+              placeholder="Full Name"
               className="input-field"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
             />
           )}
+
           <input
             type="email"
             placeholder="Email"
@@ -132,6 +299,7 @@ export default function SignInComponent({ onAuthSuccess, onClose }) {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          
           <input
             type="password"
             placeholder={isSignUpView ? "Enter your password" : "Password"}

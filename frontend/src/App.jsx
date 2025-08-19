@@ -7,6 +7,7 @@ import Upload from './Components/Upload/Upload';
 import SignIn from './Components/SignIn/SignIn';
 import NamePage from './Components/NamePage/NamePage';
 import About from './Components/About/About';
+import Chat from './Components/Chat/Chat';
 
 function App() {
   const [activeModal, setActiveModal] = useState(null); 
@@ -30,6 +31,8 @@ function App() {
 
           {/*About */}
           <Route path="/about" element={<About />} />
+          {/* chat */}
+          <Route path="/chat" element={<Chat />} />
         </Routes>
 
        
