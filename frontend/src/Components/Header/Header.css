@@ -258,3 +258,43 @@
     right: -10px;
   }
 }
+
+/* Logo Container */
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+
+/* CompaniO Golden Logo */
+.logo {
+  font-family: 'Orbitron', sans-serif; /* Futuristic tech font */
+  font-size: 1.7rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #FFD700, #FFA500, #FFB347, #FFD700);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldShine 6s ease infinite;
+  letter-spacing: 1.5px;
+  text-shadow: 0px 0px 8px rgba(255, 215, 0, 0.5); /* soft glow */
+}
+
+/* Gold Shimmer Animation */
+@keyframes goldShine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Tagline Styling */
+.logo-tagline {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-top: 5px;
+  color: #dfd6a4; /* solid golden yellow */
+  letter-spacing: 1px;
+  text-transform: capitalize;
+}

@@ -1,101 +1,3 @@
-
-
-// import React, { Suspense, useEffect } from "react";
-// import "./Hero.css";
-// import { Link } from "react-router-dom";
-// import { Canvas } from "@react-three/fiber";
-// import { OrbitControls, useGLTF, useAnimations, Html } from "@react-three/drei";
-
-// // 3D Model component for girl with animation
-// function RobotModel() {
-//   const { scene, animations } = useGLTF("/models/girl.glb");
-//   const { actions } = useAnimations(animations, scene);
-
-//   // Play a specific animation clip on component mount
-//   useEffect(() => {
-//     // Check if the "Idle" animation exists and play it
-//     if (actions["Idle"]) {
-//       actions["Idle"].play();
-//     }
-//   }, [actions]);
-
-//   return (
-//     <primitive
-//       object={scene}
-//       scale={2.5}
-//       position={[-1.5, -1, 0]} // Repositioned to the left
-//     />
-//   );
-// }
-
-// // 3D Model component for boy with animation
-// function RobotModel1() {
-//   const { scene, animations } = useGLTF("/models/boy.glb");
-//   const { actions } = useAnimations(animations, scene);
-
-//   // Play a specific animation clip on component mount
-//   useEffect(() => {
-//     // Check if the "Idle" animation exists and play it
-//     if (actions["Idle"]) {
-//       actions["Idle"].play();
-//     }
-//   }, [actions]);
-
-//   return (
-//     <primitive
-//       object={scene}
-//       scale={2.5}
-//       position={[1.5, -1, 0]} // Repositioned to the right
-//     />
-//   );
-// }
-
-// const Hero = () => {
-//   return (
-//     <section className="hero">
-//       <div className="hero-text">
-//         <h1>Your Virtual Companion</h1>
-//         <p>
-//           Chat, explore, and grow with your AI-powered friend. <br />
-//           Always there to listen, guide, and make your day brighter.
-//         </p>
-//         <Link to="/upload" className="btn">
-//           Get Started
-//         </Link>
-//       </div>
-
-//       {/* 3D Model Canvas */}
-//       <div className="hero-3d">
-//         <Canvas style={{ height: "550px", width: "550px" }}>
-//           {/* Ambient light for base illumination */}
-//           <ambientLight intensity={0.5} />
-
-//           {/* Blueish light from the left */}
-//           <directionalLight 
-//             position={[-5, 5, 5]} 
-//             intensity={1} 
-//             color="#00aaff" // A vibrant blue
-//           />
-
-//           {/* Pinkish-red light from the right */}
-//           <directionalLight 
-//             position={[5, 5, 5]} 
-//             intensity={1} 
-//             color="#ff429e" // A bright pink
-//           />
-//           <OrbitControls />
-//           <Suspense fallback={<Html center><p style={{color: "white"}}>Loading Models...</p></Html>}>
-//             <RobotModel />
-//             <RobotModel1 />
-//           </Suspense>
-//         </Canvas>
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default Hero;
-
 import React, { Suspense, useEffect, useState } from "react";
 import "./Hero.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -192,8 +94,7 @@ const Hero = () => {
         <div className="hero-text">
           <h1>Your Virtual Companion</h1>
           <p>
-            Chat, explore, and grow with your AI-powered friend. <br />
-            Always there to listen, guide, and make your day brighter.
+            Your trusted virtual friend, connecting hearts and minds everyday.
           </p>
           <button onClick={handleGetStarted} className="btn1">
             Get Started

@@ -2,7 +2,7 @@ body {
   margin: 0;
   font-family: "Poppins";
   /* background: linear-gradient(-45deg, #000000,#1b0236, #000000, #2d2003,#000000); */
-  background: linear-gradient(-45deg,#100445,#31041a,#0000);
+  background: linear-gradient(-45deg,#200e71,#31041a,rgb(100, 5, 100));
     /* background: linear-gradient(-45deg, #1f1c2c, #928dab, #1f1c2c, #928dab); */
   background-size: 400% 400%;
   animation: gradientBG 10s ease infinite;
@@ -16,14 +16,7 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* .hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 60px;
-  min-height: 100vh;
-  flex-wrap: wrap;
-} */
+
 .hero {
   position: relative;
   height: 100vh;
@@ -191,4 +184,27 @@ body {
 .close-btn:hover {
   color: #666 !important;
   transform: scale(1.1);
+}
+
+
+/* Hero Section Text */
+.hero-text h1 {
+  font-family: 'Orbitron', sans-serif; /* Techy futuristic font */
+  font-size: 3rem;
+  font-weight: 600;
+  color: #eed63e; /* base white */
+  text-shadow: 0 0 6px rgba(0, 242, 254, 0.4), 
+               0 0 12px rgba(255, 66, 158, 0.4); /* softer glow */
+  margin-bottom: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Tagline under Virtual Companion */
+.hero-text p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600; /* made bold */
+  color: #fcfcfc; /* soft bluish tone matching theme */
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 4px rgba(0, 170, 255, 0.3); /* subtle glow */
 }
