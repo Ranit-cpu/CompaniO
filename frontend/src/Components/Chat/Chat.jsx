@@ -117,108 +117,131 @@ export default function Chat() {
   };
 
   return (
-    <div ref={containerRef} className="chat-container">
-      {/* Chat Messages */}
-      <div ref={chatBoxRef} className="chat-messages">
-        {messages.map((msg) => (
-          <div key={msg.id} className={`message ${msg.sender}`}>
-            <div>{msg.text}</div>
-            <div className="message-time">{formatTime(msg.timestamp)}</div>
-          </div>
-        ))}
-
-        {typing && (
-          <div className="typing-indicator">
-            <span>Typing</span>
-            <div className="typing-dots">
-              <div className="typing-dot"></div>
-              <div className="typing-dot"></div>
-              <div className="typing-dot"></div>
+    <>
+      <div ref={containerRef} className="chat-container">
+        {/* Profile Header */}
+        <div className="profile-header">
+          <div className="profile-info">
+            <div className="profile-avatar">
+              {uploadedPhoto ? (
+                <img src={uploadedPhoto} alt="Companion" />
+              ) : (
+                <div className="default-avatar">💕</div>
+              )}
+              {onlineStatus && <div className="online-indicator"></div>}
+            </div>
+            <div className="profile-details">
+              <h2>{userName ? `${userName}'s Companion` : "Virtual Companion"}</h2>
+              <p>{onlineStatus ? "Online • Active now" : "Last seen recently"}</p>
             </div>
           </div>
-        )}
-      </div>
-
-      {/* Chat Input */}
-      <div className="chat-input-area">
-        <div className="input-container">
-          <input
-            type="text"
-            className="chat-input"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message..."
-            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-          />
-          <div className="input-actions">
-            {/* ✅ Toggle emoji picker */}
-            <button
-              className="input-btn"
-              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-            >
-              <Smile size={18} />
+          <div className="call-actions">
+            <button className="action-btn video-btn" onClick={startVideoCall}>
+              <Video size={20} />
             </button>
-            <button className="input-btn"><Camera size={18} /></button>
-            <button className="input-btn send-btn" onClick={sendMessage}>
-              <Send size={18} />
+            <button className="action-btn settings-btn">
+              <Settings size={20} />
             </button>
           </div>
         </div>
 
-        {/* ✅ Emoji Picker (WhatsApp style floating above input) */}
-        {showEmojiPicker && (
-          <div className="emoji-picker" ref={pickerRef}>
-            <EmojiPicker onEmojiClick={onEmojiClick} theme="light" />
-          </div>
-        )}
-      </div>
-
-      {/* Video Call Overlay */}
-      {isVideoCall && (
-        <div className="video-call-overlay">
-          <div className="video-call-header">
-            <div>
-              <h3>Video Call with {userName || "Companion"}</h3>
-              <p>Connected • 00:00</p>
+        {/* Chat Messages */}
+        <div ref={chatBoxRef} className="chat-messages">
+          {messages.map((msg) => (
+            <div key={msg.id} className={`message ${msg.sender}`}>
+              <div>{msg.text}</div>
+              <div className="message-time">{formatTime(msg.timestamp)}</div>
             </div>
-          </div>
-          <div className="video-call-content">
-            {uploadedPhoto ? (
-              <img src={uploadedPhoto} alt="Companion" className="video-avatar" />
-            ) : (
-              <div
-                className="video-avatar"
-                style={{
-                  background: "linear-gradient(45deg, #667eea, #764ba2)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "4rem"
-                }}
-              >
-                💕
+          ))}
+
+          {typing && (
+            <div className="typing-indicator">
+              <span>Typing</span>
+              <div className="typing-dots">
+                <div className="typing-dot"></div>
+                <div className="typing-dot"></div>
+                <div className="typing-dot"></div>
               </div>
-            )}
-            <div className="video-controls">
-              <button
-                className={`control-btn ${isAudioEnabled ? "active" : "inactive"}`}
-                onClick={() => setIsAudioEnabled(!isAudioEnabled)}
-              >
-                {isAudioEnabled ? <Mic size={24} /> : <MicOff size={24} />}
+            </div>
+          )}
+        </div>
+
+        {/* Chat Input */}
+        <div className="chat-input-area">
+          <div className="input-container">
+            <input
+              type="text"
+              className="chat-input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type a message..."
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            />
+            <div className="input-actions">
+              <button className="input-btn">
+                <Smile size={18} />
               </button>
-              <button
-                className={`control-btn ${isVideoEnabled ? "active" : "inactive"}`}
-                onClick={() => setIsVideoEnabled(!isVideoEnabled)}
-              >
-                {isVideoEnabled ? <Video size={24} /> : <VideoOff size={24} />}
+              <button className="input-btn">
+                <Camera size={18} />
               </button>
-              <button className="control-btn end-call-btn" onClick={endVideoCall}>
-                <PhoneOff size={24} />
+              <button className="input-btn send-btn" onClick={sendMessage}>
+                <Send size={18} />
               </button>
             </div>
           </div>
         </div>
-      )}
-    </div>
+
+        {/* Video Call Overlay */}
+        {isVideoCall && (
+          <div className="video-call-overlay">
+            <div className="video-call-header">
+              <div>
+                <h3>Video Call with {userName || "Companion"}</h3>
+                <p>Connected • 00:00</p>
+              </div>
+            </div>
+
+            <div className="video-call-content">
+              {uploadedPhoto ? (
+                <img src={uploadedPhoto} alt="Companion" className="video-avatar" />
+              ) : (
+                <div
+                  className="video-avatar"
+                  style={{
+                    background: 'linear-gradient(45deg, #667eea, #764ba2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '4rem'
+                  }}
+                >
+                  💕
+                </div>
+              )}
+
+              <div className="video-controls">
+                <button
+                  className={`control-btn ${isAudioEnabled ? 'active' : 'inactive'}`}
+                  onClick={() => setIsAudioEnabled(!isAudioEnabled)}
+                >
+                  {isAudioEnabled ? <Mic size={24} /> : <MicOff size={24} />}
+                </button>
+
+                <button
+                  className={`control-btn ${isVideoEnabled ? 'active' : 'inactive'}`}
+                  onClick={() => setIsVideoEnabled(!isVideoEnabled)}
+                >
+                  {isVideoEnabled ? <Video size={24} /> : <VideoOff size={24} />}
+                </button>
+
+                <button className="control-btn end-call-btn" onClick={endVideoCall}>
+                  <PhoneOff size={24} />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

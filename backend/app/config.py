@@ -8,7 +8,7 @@ DB_FILE = BASE_DIR.parent / "companio.db"
 
 JWT_SECRET = os.environ.get("COMPANIO_JWT_SECRET", "change_this_secret")
 JWT_ALGO = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 # ensure directories exist
 os.makedirs(UPLOAD_DIR, exist_ok=True)

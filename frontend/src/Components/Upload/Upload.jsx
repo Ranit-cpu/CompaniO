@@ -1,20 +1,45 @@
-
-
-import React, { useState, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'; // ✅ Import useNavigate
+import React, { useState, useRef, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { UploadCloud, X } from 'lucide-react';
 import "./Upload.css";
 import introVideo from "../../assets/avatar2.mp4";
 
 export default function Upload() {
   const location = useLocation();
-  const navigate = useNavigate(); // ✅ for navigation
-  const { userName, userGender } = location.state || {};
+  const navigate = useNavigate();
 
+  // Get both user data (from login) and companion data (from NamePage)
+  const getUserAndCompanionData = () => {
+    // Get companion data from navigation state
+    const companionData = location.state || {};
+
+    // Get user data from localStorage (stored during login/signup)
+    const userData = {
+      userName: localStorage.getItem('userName'),  // ✅ fixed
+      userEmail: localStorage.getItem('userEmail') // ✅ fixed
+    };
+
+    return {
+      // User info (from login)
+      userName: userData.userName,
+      userEmail: userData.userEmail,
+      // Companion info (from NamePage)
+      companionName: companionData.companionName,
+      companionGender: companionData.companionGender
+    };
+  };
+
+  const [allData, setAllData] = useState(getUserAndCompanionData());
   const [file, setFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef(null);
+
+  // Debug: Log all data to see what we're getting
+  useEffect(() => {
+    console.log('Upload page - All data:', allData);
+    console.log('Location state:', location.state);
+  }, [allData, location.state]);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -41,12 +66,18 @@ export default function Upload() {
 
   const handleUpload = () => {
     if (file) {
-      // ✅ Create object URL for uploaded image
+      // Create object URL for uploaded image
       const imageURL = URL.createObjectURL(file);
 
-      // ✅ Navigate to Chat.jsx and pass data
+      // Navigate to Chat.jsx and pass all data
       navigate("/chat", {
-        state: { userName, userGender, uploadedPhoto: imageURL }
+        state: {
+          userName: allData.userName,
+          userEmail: allData.userEmail, // ✅ include email too
+          companionName: allData.companionName,
+          companionGender: allData.companionGender,
+          uploadedPhoto: imageURL
+        }
       });
     } else {
       alert("Please select a file to upload.");
@@ -85,10 +116,17 @@ export default function Upload() {
         {/* Header */}
         <div className="header-section">
           <h1 className="main-title">
-            {userName ? `Welcome ${userName}!` : 'Your Virtual Companion Awaits'}
+            {allData.userName && allData.companionName ?
+              `Hi ${allData.userName}! Meet ${allData.companionName}!` :
+              allData.companionName ?
+                `Welcome ${allData.companionName}!` :
+                allData.userName ?
+                  `Welcome ${allData.userName}!` :
+                  'Your Virtual Companion Awaits'
+            }
           </h1>
           <p className="upload-prompt">
-           Upload a photo, transform and meet your personalized AI humanoid model
+            Upload a photo, transform and meet your personalized AI humanoid model
           </p>
         </div>
 
@@ -133,7 +171,7 @@ export default function Upload() {
           )}
         </div>
 
-        {/* ✅ Button navigates to Chat */}
+        {/* Button navigates to Chat */}
         <button
           onClick={handleUpload}
           className="generate-btn"

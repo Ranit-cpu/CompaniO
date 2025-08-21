@@ -1,39 +1,34 @@
-
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import { useNavigate } from "react-router-dom";
 import "./NamePage.css";
 import robo2 from "../../assets/robo2.png";
 import bubblemsg2 from "../../assets/bubblemsg2.png";
 
 const NamePage = () => {
-  const [name, setName] = useState(""); // Add state for name
+  const [companionName, setCompanionName] = useState(""); // Changed to companionName
   const [gender, setGender] = useState("");
-  const navigate = useNavigate(); // Initialize navigate hook
+  const navigate = useNavigate();
 
   // Handle continue button click
   const handleContinue = () => {
     // Validate that both name and gender are selected
-    if (!name.trim()) {
-      alert("Please enter your name");
+    if (!companionName.trim()) {
+      alert("Please enter your companion's name");
       return;
     }
-    
+
     if (!gender) {
-      alert("Please select your gender");
+      alert("Please select your companion's gender");
       return;
     }
 
-    // You can pass the user data to the next page if needed
-    // Option 1: Navigate with state
-    navigate("/upload", { 
-      state: { 
-        userName: name, 
-        userGender: gender 
-      } 
+    // Navigate to upload page with companion data
+    navigate("/upload", {
+      state: {
+        companionName: companionName.trim(),
+        companionGender: gender
+      }
     });
-
-    // Option 2: Just navigate to upload page
-    // navigate("/upload");
   };
 
   return (
@@ -47,12 +42,12 @@ const NamePage = () => {
       {/* Center Input Section */}
       <div className="form-container">
         <h2 className="input-label">Enter Your Companion Name</h2>
-        <input 
-          type="text" 
-          placeholder="Enter" 
-          className="name-input" 
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+        <input
+          type="text"
+          placeholder="Enter companion name"
+          className="name-input"
+          value={companionName}
+          onChange={(e) => setCompanionName(e.target.value)}
         />
 
         {/* Gender Selection */}
