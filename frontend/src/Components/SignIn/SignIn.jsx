@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import "./SignIn.css";
 
@@ -42,7 +41,7 @@ export default function SignInComponent({ onAuthSuccess, onClose }) {
         : "http://127.0.0.1:8000/auth/login"; // Change to your backend login endpoint
 
       // Prepare request body based on view
-      const requestBody = isSignUpView 
+      const requestBody = isSignUpView
         ? { name, email, password }  // Include name for signup
         : { email, password };       // Only email and password for login
 
@@ -63,17 +62,24 @@ export default function SignInComponent({ onAuthSuccess, onClose }) {
       // Handle success
       setSuccessMsg(isSignUpView ? "Account created successfully!" : "Logged in successfully!");
 
-      if (!isSignUpView && data.token) {
-        // Save token to localStorage for authentication
-        localStorage.setItem("token", data.token);
+      // For both signup and login, check if we have a token
+      if (data.token) {
+        // Call the success callback with the actual token
+        setTimeout(() => {
+          if (onAuthSuccess) {
+            onAuthSuccess(data.token); // Pass the REAL token here
+          }
+        }, 1500);
+      } else if (isSignUpView) {
+        // For signup, if no token is returned, just show success and switch to login
+        setTimeout(() => {
+          setIsSignUpView(false); // Switch to login view
+          setSuccessMsg("Please log in with your new account");
+        }, 1500);
+      } else {
+        // Login without token - this shouldn't happen
+        throw new Error("Login successful but no token received");
       }
-
-      // Call the success callback after a short delay to show the success message
-      setTimeout(() => {
-        if (onAuthSuccess) {
-          onAuthSuccess();
-        }
-      }, 1500);
 
     } catch (err) {
       setErrorMsg(err.message);
