@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from sqlmodel import Session, select, create_engine
 from passlib.context import CryptContext
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from ..models.models import User
 from ..config import DB_FILE, JWT_SECRET, JWT_ALGO, ACCESS_TOKEN_EXPIRE_MINUTES
 from datetime import datetime, timedelta
@@ -10,7 +10,7 @@ import uuid
 
 class SignupRequest(BaseModel):
     username : str
-    email: str
+    email: EmailStr
     password: str
 
 class LoginRequest(BaseModel):
@@ -37,7 +37,7 @@ def get_user_id() -> str:
 
 @router.post("/signup")
 def signup(payload: SignupRequest):
-    username = payload
+    username = payload.username
     email = payload.email
     password = payload.password
 
@@ -45,7 +45,7 @@ def signup(payload: SignupRequest):
         existing = s.exec(select(User).where(User.email == email)).first()
         if existing:
             raise HTTPException(status_code=400, detail="Email already registered")
-        user = User(id = get_user_id(),username = username,email=email, password_hash=get_password_hash(password))
+        user = User(id = get_user_id(),username = username,email=email, password_hash=get_password_hash(password),created_at=datetime.utcnow())
         s.add(user)
         s.commit()
         s.refresh(user)
