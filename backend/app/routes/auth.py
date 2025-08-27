@@ -2,14 +2,14 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import Session, select, create_engine
 from passlib.context import CryptContext
 from pydantic import BaseModel, EmailStr
+from jose import JWTError, jwt  # Changed import
 from ..models.models import User
 from ..config import DB_FILE, JWT_SECRET, JWT_ALGO, ACCESS_TOKEN_EXPIRE_MINUTES
 from datetime import datetime, timedelta
-import jwt
 import uuid
 
 class SignupRequest(BaseModel):
-    username : str
+    name: str  # Changed from username
     email: EmailStr
     password: str
 
@@ -23,7 +23,7 @@ engine = create_engine(f"sqlite:///{DB_FILE}")
 
 def create_access_token(subject: str):
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode = {"sub": str(subject), "exp": expire}  # use datetime, jwt will convert
+    to_encode = {"sub": str(subject), "exp": expire}
     return jwt.encode(to_encode, JWT_SECRET, algorithm=JWT_ALGO)
 
 def verify_password(plain, hashed):
@@ -37,7 +37,7 @@ def get_user_id() -> str:
 
 @router.post("/signup")
 def signup(payload: SignupRequest):
-    username = payload.username
+    name = payload.name  # Changed from username
     email = payload.email
     password = payload.password
 
@@ -45,15 +45,28 @@ def signup(payload: SignupRequest):
         existing = s.exec(select(User).where(User.email == email)).first()
         if existing:
             raise HTTPException(status_code=400, detail="Email already registered")
-        user = User(id = get_user_id(),username = username,email=email, password_hash=get_password_hash(password),created_at=datetime.utcnow())
+        user = User(
+            id=get_user_id(),
+            username=name,  # Use name for username field in database
+            email=email, 
+            password_hash=get_password_hash(password),
+            created_at=datetime.utcnow()
+        )
         s.add(user)
         s.commit()
         s.refresh(user)
         token = create_access_token(user.id)
-        return {"user": {"id": user.id, "email": user.email}, "token": token}
+        return {
+            "user": {
+                "id": user.id, 
+                "email": user.email,
+                "name": user.username  # Return name for frontend
+            }, 
+            "token": token
+        }
 
 @router.post("/login")
-def login(payload:LoginRequest):
+def login(payload: LoginRequest):
     email = payload.email
     password = payload.password
 
@@ -62,4 +75,11 @@ def login(payload:LoginRequest):
         if not user or not verify_password(password, user.password_hash):
             raise HTTPException(status_code=401, detail="Invalid credentials")
         token = create_access_token(user.id)
-        return {"token": token}
+        return {
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "name": user.username
+            },
+            "token": token
+        }

@@ -39,7 +39,7 @@ export default function Chat() {
 
   // Connect WebSocket
   useEffect(() => {
-    const ws = new WebSocket(`ws://localhost:8000/ws/chat/${sessionId}`);
+    const ws = new WebSocket(`ws://localhost:8000/ws/sessions/${sessionId}`);
     wsRef.current = ws;
 
     ws.onopen = () => {
@@ -52,23 +52,26 @@ export default function Chat() {
       }]);
     };
 
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === "bot_message") {
-        setMessages(prev => [...prev, {
-          id: Date.now(),
-          sender: "companion",
-          text: data.text,
-          timestamp: new Date()
-        }]);
+   ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  
+  if (data.type === "bot_message") {
+    setMessages(prev => [...prev, {
+      id: Date.now(),
+      sender: "companion",
+      text: data.text,
+      timestamp: new Date()
+    }]);
 
-        if (data.tts_path) {
-          const audio = new Audio(`http://localhost:8000/${data.tts_path}`);
-          audio.play().catch(err => console.warn("Audio play failed:", err));
-        }
-        setTyping(false);
-      }
-    };
+    // Play TTS if available
+    if (data.tts_path) {
+      const audio = new Audio(`http://localhost:8000/${data.tts_path}`);
+      audio.play().catch(err => console.warn("Audio play failed:", err));
+    }
+    
+    setTyping(false);
+  }
+};
 
     ws.onclose = () => console.log("❌ WebSocket closed");
 
