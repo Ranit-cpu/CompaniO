@@ -430,3 +430,102 @@
           .chat-messages::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.5);
           }
+          /* Add these styles to your existing Chat.css */
+
+.personality-badge {
+  background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  margin-left: 8px;
+  font-weight: 500;
+}
+
+.status-text {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.emoji-picker-container {
+  position: absolute;
+  bottom: 70px;
+  right: 20px;
+  z-index: 1000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Enhanced typing indicator */
+.typing-indicator span {
+  font-weight: 500;
+  color: #666;
+}
+
+/* Enhanced message styling */
+.message.companion {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  align-self: flex-start;
+  max-width: 75%;
+  position: relative;
+}
+
+.message.companion::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-right-color: #667eea;
+}
+
+/* Upload page personality preview */
+.personality-preview {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  margin: 5px 0 15px 0;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Video call enhancements */
+.video-call-overlay h3 {
+  color: white;
+  font-size: 18px;
+  margin: 0;
+}
+
+.video-call-overlay p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  margin: 5px 0 0 0;
+}
+
+/* Responsive design for traits */
+@media (max-width: 768px) {
+  .traits-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 8px;
+  }
+  
+  .trait-btn {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+  
+  .personality-badge {
+    font-size: 10px;
+    padding: 1px 6px;
+  }
+  
+  .emoji-picker-container {
+    right: 10px;
+    bottom: 60px;
+  }
+}

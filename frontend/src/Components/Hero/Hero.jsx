@@ -14,13 +14,7 @@ function RobotModel() {
     if (actions["Idle"]) actions["Idle"].play();
   }, [actions]);
 
-  return (
-    <primitive
-      object={scene}
-      scale={2.5}
-      position={[-1.5, -1, 0]}
-    />
-  );
+  return <primitive object={scene} scale={2.5} position={[-1.5, -1, 0]} />;
 }
 
 // 3D Model component for boy with animation
@@ -32,40 +26,56 @@ function RobotModel1() {
     if (actions["Idle"]) actions["Idle"].play();
   }, [actions]);
 
-  return (
-    <primitive
-      object={scene}
-      scale={2.5}
-      position={[1.5, -1, 0]}
-    />
-  );
+  return <primitive object={scene} scale={2.5} position={[1.5, -1, 0]} />;
 }
 
 const Hero = ({ isAuthenticated, setActiveModal, onAuthSuccess }) => {
   const [showSignIn, setShowSignIn] = useState(false);
   const navigate = useNavigate();
 
+  // ⭐ Add stars effect on mount
+  useEffect(() => {
+    const starsContainer = document.querySelector(".hero-stars");
+    if (!starsContainer) return;
+
+    for (let i = 0; i < 150; i++) {
+      const star = document.createElement("div");
+      star.classList.add("star");
+
+      const x0 = Math.random() * window.innerWidth;
+      const y0 = Math.random() * window.innerHeight;
+      const x1 = Math.random() * window.innerWidth;
+      const y1 = Math.random() * window.innerHeight;
+
+      star.style.setProperty("--x0", x0 + "px");
+      star.style.setProperty("--y0", y0 + "px");
+      star.style.setProperty("--x1", x1 + "px");
+      star.style.setProperty("--y1", y1 + "px");
+
+      star.style.animationDuration = 5 + Math.random() * 15 + "s";
+      star.style.transform = `scale(${0.5 + Math.random() * 1.5})`;
+
+      starsContainer.appendChild(star);
+    }
+  }, []);
+
   const handleGetStarted = () => {
-    console.log("Get Started clicked, isAuthenticated:", isAuthenticated);
     if (isAuthenticated) {
       navigate("/namepage");
     } else {
-      // Use the parent's modal system instead of local state
       if (setActiveModal) {
         setActiveModal("login");
       } else {
-        setShowSignIn(true); // fallback to local modal
+        setShowSignIn(true);
       }
     }
   };
 
   const handleAuthSuccess = (realToken) => {
-    // Only proceed if we have a real token
     if (realToken && realToken !== "dummyToken") {
       localStorage.setItem("token", realToken);
       setShowSignIn(false);
 
-      // Notify parent component of successful auth
       if (onAuthSuccess) {
         onAuthSuccess(realToken);
       }
@@ -84,6 +94,9 @@ const Hero = ({ isAuthenticated, setActiveModal, onAuthSuccess }) => {
   return (
     <>
       <section className="hero">
+        {/* ⭐ Stars background */}
+        <div className="hero-stars"></div>
+
         <div className="hero-text">
           <h1>Your Virtual Companion</h1>
           <p>Your trusted virtual friend, connecting hearts and minds everyday.</p>
@@ -98,7 +111,13 @@ const Hero = ({ isAuthenticated, setActiveModal, onAuthSuccess }) => {
             <directionalLight position={[-5, 5, 5]} intensity={1} color="#00aaff" />
             <directionalLight position={[5, 5, 5]} intensity={1} color="#ff429e" />
             <OrbitControls />
-            <Suspense fallback={<Html center><p style={{color: "white"}}>Loading Models...</p></Html>}>
+            <Suspense
+              fallback={
+                <Html center>
+                  <p style={{ color: "white" }}>Loading Models...</p>
+                </Html>
+              }
+            >
               <RobotModel />
               <RobotModel1 />
             </Suspense>
@@ -106,11 +125,11 @@ const Hero = ({ isAuthenticated, setActiveModal, onAuthSuccess }) => {
         </div>
       </section>
 
-      {/* Local Sign In Modal (fallback) */}
+      {/* Local Sign In Modal */}
       {showSignIn && (
         <div
           className="modal-overlay"
-          onClick={(e) => e.target.classList.contains('modal-overlay') && handleCloseSignIn()}
+          onClick={(e) => e.target.classList.contains("modal-overlay") && handleCloseSignIn()}
         >
           <div className="modal-content">
             <SignInComponent

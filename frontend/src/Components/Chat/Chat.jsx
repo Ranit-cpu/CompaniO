@@ -5,16 +5,24 @@ import {
   Video, VideoOff, PhoneOff, Mic, MicOff,
   Send, Smile, Camera, Settings
 } from "lucide-react";
-import EmojiPicker from "emoji-picker-react";   // ✅ import picker
+import EmojiPicker from "emoji-picker-react";
 import "./Chat.css";
 
 export default function Chat() {
   const location = useLocation();
-  const { userName, uploadedPhoto } = location.state || {};
+  const { 
+    userName, 
+    companionName, 
+    companionGender,
+    moonSign,
+    personalityTraits = [],
+    uploadedPhoto 
+  } = location.state || {};
+  
   const containerRef = useRef(null);
   const chatBoxRef = useRef(null);
   const wsRef = useRef(null);
-  const pickerRef = useRef(null); // ✅ ref for closing picker outside
+  const pickerRef = useRef(null);
 
   const sessionId = userName || "guest";
   const [messages, setMessages] = useState([]);
@@ -26,7 +34,7 @@ export default function Chat() {
   const [onlineStatus, setOnlineStatus] = useState(true);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-  // ✅ Close emoji picker when clicking outside
+  // Close emoji picker when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (pickerRef.current && !pickerRef.current.contains(e.target)) {
@@ -37,6 +45,27 @@ export default function Chat() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Create personality context for AI
+  const createPersonalityContext = () => {
+    let context = `You are ${companionName || 'a virtual companion'}`;
+    
+    if (companionGender) {
+      context += `, a ${companionGender} AI companion`;
+    }
+    
+    if (moonSign) {
+      context += ` with ${moonSign} moon sign characteristics`;
+    }
+    
+    if (personalityTraits && personalityTraits.length > 0) {
+      context += `. Your personality traits include: ${personalityTraits.join(', ')}`;
+    }
+    
+    context += `. You are chatting with ${userName || 'your user'}. Be personalized, engaging, and embody these characteristics naturally in your responses. Don't mention that you're an AI unless specifically asked.`;
+    
+    return context;
+  };
+
   // Connect WebSocket
   useEffect(() => {
     const ws = new WebSocket(`ws://localhost:8000/ws/sessions/${sessionId}`);
@@ -44,39 +73,64 @@ export default function Chat() {
 
     ws.onopen = () => {
       console.log("✅ WebSocket connected");
+      
+      // Send personality context to backend for AI customization
+      const personalityContext = createPersonalityContext();
+      ws.send(JSON.stringify({
+        type: "personality_context",
+        context: personalityContext,
+        companionName: companionName,
+        companionGender: companionGender,
+        moonSign: moonSign,
+        personalityTraits: personalityTraits
+      }));
+
+      // Create personalized welcome message
+      let welcomeMessage = `Hi ${userName || "friend"}! `;
+      
+      if (moonSign && personalityTraits.length > 0) {
+        welcomeMessage += `I'm ${companionName}, your ${personalityTraits[0].toLowerCase()} companion! As a ${moonSign}, I'm excited to connect with you! ✨😊`;
+      } else if (moonSign) {
+        welcomeMessage += `I'm ${companionName}! With my ${moonSign} energy, I'm so excited to chat with you! 🌙✨`;
+      } else if (personalityTraits.length > 0) {
+        welcomeMessage += `I'm ${companionName}, and I'm feeling quite ${personalityTraits[0].toLowerCase()} today! Can't wait to get to know you better! 😊`;
+      } else {
+        welcomeMessage += `I'm ${companionName}, so excited to chat with you! 😊✨`;
+      }
+
       setMessages(prev => [...prev, {
         id: Date.now(),
         sender: "companion",
-        text: `Hi ${userName || "friend"}! I'm so excited to chat with you! 😊✨`,
+        text: welcomeMessage,
         timestamp: new Date()
       }]);
     };
 
-   ws.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  
-  if (data.type === "bot_message") {
-    setMessages(prev => [...prev, {
-      id: Date.now(),
-      sender: "companion",
-      text: data.text,
-      timestamp: new Date()
-    }]);
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      
+      if (data.type === "bot_message") {
+        setMessages(prev => [...prev, {
+          id: Date.now(),
+          sender: "companion",
+          text: data.text,
+          timestamp: new Date()
+        }]);
 
-    // Play TTS if available
-    if (data.tts_path) {
-      const audio = new Audio(`http://localhost:8000/${data.tts_path}`);
-      audio.play().catch(err => console.warn("Audio play failed:", err));
-    }
-    
-    setTyping(false);
-  }
-};
+        // Play TTS if available
+        if (data.tts_path) {
+          const audio = new Audio(`http://localhost:8000/${data.tts_path}`);
+          audio.play().catch(err => console.warn("Audio play failed:", err));
+        }
+        
+        setTyping(false);
+      }
+    };
 
     ws.onclose = () => console.log("❌ WebSocket closed");
 
     return () => ws.close();
-  }, [sessionId, userName]);
+  }, [sessionId, userName, companionName, companionGender, moonSign, personalityTraits]);
 
   // Auto scroll
   useEffect(() => {
@@ -114,9 +168,21 @@ export default function Chat() {
   const formatTime = (date) =>
     date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
-  // ✅ Handle emoji select
+  // Handle emoji select
   const onEmojiClick = (emojiObject) => {
     setInput(prev => prev + emojiObject.emoji);
+  };
+
+  // Get personality badge text
+  const getPersonalityBadge = () => {
+    if (moonSign && personalityTraits.length > 0) {
+      return `${moonSign} • ${personalityTraits[0]}`;
+    } else if (moonSign) {
+      return moonSign;
+    } else if (personalityTraits.length > 0) {
+      return personalityTraits[0];
+    }
+    return null;
   };
 
   return (
@@ -127,15 +193,22 @@ export default function Chat() {
           <div className="profile-info">
             <div className="profile-avatar">
               {uploadedPhoto ? (
-                <img src={uploadedPhoto} alt="Companion" />
+                <img src={uploadedPhoto} alt={companionName} />
               ) : (
-                <div className="default-avatar">💕</div>
+                <div className="default-avatar">
+                  {companionGender === 'female' ? '👩' : '👨'}
+                </div>
               )}
               {onlineStatus && <div className="online-indicator"></div>}
             </div>
             <div className="profile-details">
-              <h2>{userName ? `${userName}'s Companion` : "Virtual Companion"}</h2>
-              <p>{onlineStatus ? "Online • Active now" : "Last seen recently"}</p>
+              <h2>{companionName || "Virtual Companion"}</h2>
+              <p className="status-text">
+                {onlineStatus ? "Online • Active now" : "Last seen recently"}
+                {getPersonalityBadge() && (
+                  <span className="personality-badge">✨ {getPersonalityBadge()}</span>
+                )}
+              </p>
             </div>
           </div>
           <div className="call-actions">
@@ -159,7 +232,7 @@ export default function Chat() {
 
           {typing && (
             <div className="typing-indicator">
-              <span>Typing</span>
+              <span>{companionName || "Companion"} is typing</span>
               <div className="typing-dots">
                 <div className="typing-dot"></div>
                 <div className="typing-dot"></div>
@@ -177,11 +250,14 @@ export default function Chat() {
               className="chat-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type a message..."
+              placeholder={`Message ${companionName || "your companion"}...`}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             />
             <div className="input-actions">
-              <button className="input-btn">
+              <button 
+                className="input-btn"
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              >
                 <Smile size={18} />
               </button>
               <button className="input-btn">
@@ -192,6 +268,17 @@ export default function Chat() {
               </button>
             </div>
           </div>
+
+          {/* Emoji Picker */}
+          {showEmojiPicker && (
+            <div ref={pickerRef} className="emoji-picker-container">
+              <EmojiPicker 
+                onEmojiClick={onEmojiClick}
+                width={350}
+                height={400}
+              />
+            </div>
+          )}
         </div>
 
         {/* Video Call Overlay */}
@@ -199,26 +286,28 @@ export default function Chat() {
           <div className="video-call-overlay">
             <div className="video-call-header">
               <div>
-                <h3>Video Call with {userName || "Companion"}</h3>
+                <h3>Video Call with {companionName || "Companion"}</h3>
                 <p>Connected • 00:00</p>
               </div>
             </div>
 
             <div className="video-call-content">
               {uploadedPhoto ? (
-                <img src={uploadedPhoto} alt="Companion" className="video-avatar" />
+                <img src={uploadedPhoto} alt={companionName} className="video-avatar" />
               ) : (
                 <div
                   className="video-avatar"
                   style={{
-                    background: 'linear-gradient(45deg, #667eea, #764ba2)',
+                    background: companionGender === 'female' 
+                      ? 'linear-gradient(45deg, #ff9a9e, #fecfef)' 
+                      : 'linear-gradient(45deg, #667eea, #764ba2)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: '4rem'
                   }}
                 >
-                  💕
+                  {companionGender === 'female' ? '👩' : '👨'}
                 </div>
               )}
 

@@ -1,81 +1,142 @@
-*{
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    font-family: "Poppins";
-}
+/* Navbar container */
 .navbar {
-  /* background-color: #3e3838; */
-  /* background: linear-gradient(to right, #030303, #5e4016); */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px;
+  padding: 15px 5%;
+  background: linear-gradient(135deg, #2c003e, #1a001f);
   color: white;
-  
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+/* Logo */
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .logo {
-  font-size: 20px;
+  font-size: 1.8rem;
   font-weight: bold;
-  font-family: "Poppins";
-  font-weight: 300;
-  font-style: normal;
-  color: rgb(126, 16, 216);
-  
+  color: #ffd95a;
 }
 
+.logo-tagline {
+  font-size: 0.9rem;
+  color: #f0e6ff;
+}
+
+/* Nav links as gradient buttons */
 .nav-links {
   display: flex;
-  gap: 20px;
+  gap: 1.2rem;
 }
 
-.nav-links a {
-  color: white;
+.nav-btn {
+  padding: 8px 18px;
+  border-radius: 25px;
   text-decoration: none;
-  padding: 8px 12px;
-  font-family: "Poppins";
-  font-weight: 300;
-  font-style: normal;
+  background: linear-gradient(90deg, #ff7f50, #ffea70);
+  color: #2c003e;
+  font-weight: bold;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.nav-links a:hover {
-  /* background-color: #575757; */
-    background: linear-gradient(to right,#ffff,#31041a,#0000);
-  border-radius: 20px;
+.nav-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(255, 217, 90, 0.8);
 }
 
+/* Auth/Profile Section */
 .auth-buttons {
   display: flex;
-  gap: 10px;
-  font-family: "Poppins";
-  font-weight: 100;
-  font-style: normal;
-  
+  align-items: center;
 }
 
-.auth-buttons a ,
-.auth-buttons button{
-  color: white;
-  /* background-color: #18191a; */
-  /* background: linear-gradient(to right, #ff5f6d, #ffc371); */
-  background: linear-gradient(to right, #3e346b,#6e284a,#0000);
-  box-shadow: 2px 2px 2px white;
-  padding: 8px 14px;
-  text-decoration: none;
-  border-radius: 20px;
-  font-weight: bold;
-  color: white;
-  cursor: pointer;
-  outline: none;
+.btn1 {
+  padding: 10px 24px;
+  border-radius: 30px;
   border: none;
+  background: linear-gradient(90deg, #ff7f50, #ffea70);
+  color: #2c003e;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease;
 }
 
+.btn1:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 14px rgba(255, 217, 90, 0.8);
+}
 
+/* Profile button */
+.profile-container {
+  position: relative;
+}
 
+.profile-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
 
-.auth-buttons button :hover {
-  background-color: #0056b3;
+.profile-icon {
+  background: linear-gradient(135deg, #ff7f50, #ffea70);
+  color: #2c003e;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dropdown */
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 55px;
+  background: #2c003e;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+  min-width: 160px;
+  z-index: 2000;
+}
+
+.dropdown-header {
+  padding: 10px;
+  background: #ffd95a;
+  color: #2c003e;
+  font-weight: bold;
+  text-align: center;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.2);
+}
+
+.dropdown-item {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #fff;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 217, 90, 0.2);
 }
 
 /* Modal overlay */
@@ -85,216 +146,41 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background: rgba(0,0,0,0.75);
   display: flex;
-  justify-content: center;
   align-items: center;
-  z-index: 999;
+  justify-content: center;
+  z-index: 3000;
 }
 
 .modal-content {
-  display: flex;
-  background-color: #1f1b2e;
-  padding: 0;
-  border-radius: 10px;
-  max-width: 400px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 420px;
   width: 100%;
-  height: 100%;
+  position: relative;
 }
 
-/* Close button */
 .close-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
+  top: 12px;
+  right: 12px;
+  background: transparent;
   border: none;
-  font-size: 20px;
-  color: white;
+  font-size: 1.2rem;
   cursor: pointer;
 }
-
-/* Login  */
-
-/* Modal overlay */
-.modal-overlayL {
-  position: fixed;
+.navbar {
+  position: absolute; /* sits over Hero */
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-.modal-contentL {
-  display: flex;
-  background-color: #1f1b2e;
-  padding: 0;
-  border-radius: 10px;
-  max-width: 400px;
-  width: 100%;
-}
-
-/* Close button */
-.close-btnL {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: white;
-  cursor: pointer;
-}
-.auth-buttons :hover{
-  transform: scale(1.05);
-}
-
-/* Add these styles to your existing Header.css file */
-
-.profile-container {
-  position: relative;
-  display: inline-block;
-}
-
-.profile-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-}
-
-.profile-btn:hover {
-  transform: scale(1.05);
-}
-
-.profile-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: bold;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-.profile-dropdown {
-  position: absolute;
-  top: 100%;
   right: 0;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  min-width: 180px;
-  z-index: 1000;
-  margin-top: 8px;
-  overflow: hidden;
-  border: 1px solid #e1e5e9;
-}
-
-.dropdown-header {
-  padding: 12px 16px;
-  background: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
-}
-
-.user-name {
-  font-weight: 600;
-  color: #495057;
-  font-size: 14px;
-}
-
-.dropdown-divider {
-  height: 1px;
-  background: #e9ecef;
-  margin: 0;
-}
-
-.dropdown-item {
-  width: 100%;
-  padding: 12px 16px;
-  background: none;
-  border: none;
-  text-align: left;
-  cursor: pointer;
-  font-size: 14px;
-  color: #495057;
-  transition: background-color 0.2s ease;
+  padding: 15px 40px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-}
-
-.dropdown-item:hover {
-  background-color: #f8f9fa;
-  color: #dc3545;
-}
-
-/* Close dropdown when clicking outside */
-.profile-container.open .profile-dropdown {
-  display: block;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .profile-icon {
-    width: 35px;
-    height: 35px;
-    font-size: 14px;
-  }
-  
-  .profile-dropdown {
-    min-width: 160px;
-    right: -10px;
-  }
-}
-
-/* Logo Container */
-.logo-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-
-/* CompaniO Golden Logo */
-.logo {
-  font-family: 'Orbitron', sans-serif; /* Futuristic tech font */
-  font-size: 1.7rem;
-  font-weight: 700;
-  background: linear-gradient(90deg, #FFD700, #FFA500, #FFB347, #FFD700);
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: goldShine 6s ease infinite;
-  letter-spacing: 1.5px;
-  text-shadow: 0px 0px 8px rgba(255, 215, 0, 0.5); /* soft glow */
-}
-
-/* Gold Shimmer Animation */
-@keyframes goldShine {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Tagline Styling */
-.logo-tagline {
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 400;
-  margin-top: 5px;
-  color: #dfd6a4; /* solid golden yellow */
-  letter-spacing: 1px;
-  text-transform: capitalize;
+  background: transparent; /* matches Hero background */
+  color: white;
+  z-index: 10;
 }

@@ -15,8 +15,8 @@ export default function Upload() {
 
     // Get user data from localStorage (stored during login/signup)
     const userData = {
-      userName: localStorage.getItem('userName'),  // ✅ fixed
-      userEmail: localStorage.getItem('userEmail') // ✅ fixed
+      userName: localStorage.getItem('userName'),
+      userEmail: localStorage.getItem('userEmail')
     };
 
     return {
@@ -25,7 +25,9 @@ export default function Upload() {
       userEmail: userData.userEmail,
       // Companion info (from NamePage)
       companionName: companionData.companionName,
-      companionGender: companionData.companionGender
+      companionGender: companionData.companionGender,
+      moonSign: companionData.moonSign,
+      personalityTraits: companionData.personalityTraits || []
     };
   };
 
@@ -69,13 +71,15 @@ export default function Upload() {
       // Create object URL for uploaded image
       const imageURL = URL.createObjectURL(file);
 
-      // Navigate to Chat.jsx and pass all data
+      // Navigate to Chat.jsx and pass all data including personality traits
       navigate("/chat", {
         state: {
           userName: allData.userName,
-          userEmail: allData.userEmail, // ✅ include email too
+          userEmail: allData.userEmail,
           companionName: allData.companionName,
           companionGender: allData.companionGender,
+          moonSign: allData.moonSign,
+          personalityTraits: allData.personalityTraits,
           uploadedPhoto: imageURL
         }
       });
@@ -94,10 +98,26 @@ export default function Upload() {
     }
   };
 
+  // Create personality preview text
+  const getPersonalityPreview = () => {
+    let preview = '';
+    if (allData.moonSign) {
+      preview += `${allData.moonSign} moon sign`;
+    }
+    if (allData.personalityTraits && allData.personalityTraits.length > 0) {
+      const traitsText = allData.personalityTraits.slice(0, 3).join(', ');
+      preview += preview ? ` • ${traitsText}` : traitsText;
+      if (allData.personalityTraits.length > 3) {
+        preview += ` +${allData.personalityTraits.length - 3} more`;
+      }
+    }
+    return preview;
+  };
+
   return (
     <div className="upload-page-container">
       <div className="upload-card">
-        {/* 🎥 Video section */}
+        {/* Video section */}
         <div className="video-section">
           <video
             ref={videoRef}
@@ -119,12 +139,20 @@ export default function Upload() {
             {allData.userName && allData.companionName ?
               `Hi ${allData.userName}! Meet ${allData.companionName}!` :
               allData.companionName ?
-                `Welcome ${allData.companionName}!` :
+                `Meet ${allData.companionName}!` :
                 allData.userName ?
                   `Welcome ${allData.userName}!` :
                   'Your Virtual Companion Awaits'
             }
           </h1>
+          
+          {/* Show personality preview if available */}
+          {(allData.moonSign || (allData.personalityTraits && allData.personalityTraits.length > 0)) && (
+            <p className="personality-preview">
+              ✨ {getPersonalityPreview()}
+            </p>
+          )}
+          
           <p className="upload-prompt">
             Upload a photo, transform and meet your personalized AI humanoid model
           </p>
@@ -177,7 +205,7 @@ export default function Upload() {
           className="generate-btn"
           disabled={!file}
         >
-          Let's Connect
+          Let's Connect with {allData.companionName || 'Your Companion'}
         </button>
       </div>
     </div>
