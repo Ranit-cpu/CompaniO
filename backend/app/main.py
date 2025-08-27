@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel, create_engine
 from .config import DB_FILE
-from .routes import auth, upload, avatars, ws,chat,ai_routes
+from .routes import auth, upload, avatars, chat, ai_routes  # Remove ws import
 
 app = FastAPI(title="CompaniO Backend")
 
@@ -21,10 +21,8 @@ SQLModel.metadata.create_all(engine)
 app.include_router(auth.router)
 app.include_router(upload.router)
 app.include_router(avatars.router)
-app.include_router(ws.router)
-app.include_router(chat.router, prefix="", tags=["Chat Service"])
-app.include_router(ai_routes.router,prefix="/api",tags=["AI-Chat"])
-
+app.include_router(chat.router, prefix="", tags=["Chat Service"])  # This should include WebSocket
+app.include_router(ai_routes.router, prefix="/api", tags=["AI-Chat"])
 
 @app.get("/")
 def root():
