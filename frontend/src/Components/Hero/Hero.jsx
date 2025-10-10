@@ -34,30 +34,32 @@ const Hero = ({ isAuthenticated, setActiveModal, onAuthSuccess }) => {
   const navigate = useNavigate();
 
   // ⭐ Add stars effect on mount
-  useEffect(() => {
-    const starsContainer = document.querySelector(".hero-stars");
-    if (!starsContainer) return;
+  // useEffect for stars
+    useEffect(() => {
+      const starsContainer = document.querySelector(".hero-stars");
+      if (!starsContainer) return;
 
-    for (let i = 0; i < 150; i++) {
-      const star = document.createElement("div");
-      star.classList.add("star");
+      for (let i = 0; i < 150; i++) {
+        const star = document.createElement("div");
+        star.classList.add("star");
 
-      const x0 = Math.random() * window.innerWidth;
-      const y0 = Math.random() * window.innerHeight;
-      const x1 = Math.random() * window.innerWidth;
-      const y1 = Math.random() * window.innerHeight;
+        const x0 = Math.random() * window.innerWidth;
+        const y0 = Math.random() * window.innerHeight;
+        const x1 = Math.random() * window.innerWidth;
+        const y1 = Math.random() * window.innerHeight;
 
-      star.style.setProperty("--x0", x0 + "px");
-      star.style.setProperty("--y0", y0 + "px");
-      star.style.setProperty("--x1", x1 + "px");
-      star.style.setProperty("--y1", y1 + "px");
+        star.style.setProperty("--x0", x0 + "px");
+        star.style.setProperty("--y0", y0 + "px");
+        star.style.setProperty("--x1", x1 + "px");
+        star.style.setProperty("--y1", y1 + "px");
 
-      star.style.animationDuration = 5 + Math.random() * 15 + "s";
-      star.style.transform = `scale(${0.5 + Math.random() * 1.5})`;
+        star.style.animationDuration = 5 + Math.random() * 15 + "s";
+        star.style.transform = `scale(${0.5 + Math.random() * 1.5})`;
 
-      starsContainer.appendChild(star);
-    }
-  }, []);
+        starsContainer.appendChild(star);
+      }
+    }, []);
+
 
   const handleGetStarted = () => {
     if (isAuthenticated) {
@@ -72,18 +74,13 @@ const Hero = ({ isAuthenticated, setActiveModal, onAuthSuccess }) => {
   };
 
   const handleAuthSuccess = (realToken) => {
-    if (realToken && realToken !== "dummyToken") {
+  if (realToken && realToken !== "dummyToken") {
       localStorage.setItem("token", realToken);
-      setShowSignIn(false);
-
-      if (onAuthSuccess) {
-        onAuthSuccess(realToken);
-      }
-
-      navigate("/namepage");
+      setIsAuthenticated(true);
+      setActiveModal(null);
+      navigate("/namepage"); // ✅ move redirect here
     } else {
-      console.error("Authentication failed - no valid token received");
-      alert("Authentication failed. Please try again.");
+      console.error("Invalid token provided");
     }
   };
 

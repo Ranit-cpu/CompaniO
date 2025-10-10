@@ -11,12 +11,12 @@ const NamePage = () => {
   const [personalityTraits, setPersonalityTraits] = useState([]);
   const [customTrait, setCustomTrait] = useState("");
   const [showTraits, setShowTraits] = useState(false);
-  
+
   const navigate = useNavigate();
 
   // Predefined personality traits
   const availableTraits = [
-    "Friendly", "Adventurous", "Creative", "Calm", "Energetic", 
+    "Friendly", "Adventurous", "Creative", "Calm", "Energetic",
     "Romantic", "Intellectual", "Funny", "Caring", "Confident",
     "Mysterious", "Playful", "Wise", "Ambitious", "Loyal"
   ];
@@ -55,8 +55,8 @@ const NamePage = () => {
 
   // Handle trait selection
   const toggleTrait = (trait) => {
-    setPersonalityTraits(prev => 
-      prev.includes(trait) 
+    setPersonalityTraits(prev =>
+      prev.includes(trait)
         ? prev.filter(t => t !== trait)
         : [...prev, trait]
     );
@@ -103,7 +103,7 @@ const NamePage = () => {
       {/* Form Section */}
       <div className="form-container">
         <h2 className="input-label">Create Your AI Companion</h2>
-        
+
         {/* Name Input */}
         <input
           type="text"
@@ -132,7 +132,7 @@ const NamePage = () => {
         </div>
 
         {/* Optional Personality Section Toggle */}
-        <button 
+        <button
           type="button"
           className="traits-toggle-btn"
           onClick={() => setShowTraits(!showTraits)}
@@ -145,7 +145,7 @@ const NamePage = () => {
             {/* Moon Sign Selection */}
             <div className="moon-sign-container">
               <label className="trait-label">Moon Sign (Optional):</label>
-              <select 
+              <select
                 className="moon-sign-select"
                 value={moonSign}
                 onChange={(e) => setMoonSign(e.target.value)}
@@ -183,7 +183,7 @@ const NamePage = () => {
                   onChange={(e) => setCustomTrait(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && addCustomTrait()}
                 />
-                <button 
+                <button
                   type="button"
                   className="add-trait-btn"
                   onClick={addCustomTrait}
@@ -199,7 +199,7 @@ const NamePage = () => {
                   <div className="selected-traits-list">
                     {personalityTraits.map(trait => (
                       <span key={trait} className="selected-trait">
-                        {trait} 
+                        {trait}
                         <button onClick={() => toggleTrait(trait)}>×</button>
                       </span>
                     ))}
