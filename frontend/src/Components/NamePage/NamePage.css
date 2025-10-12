@@ -43,12 +43,12 @@
   100% { transform: translate3d(var(--x1,0px), var(--y1,0px), 0); }
 }
 
-/* Floating images */
+/* Floating Images */
 .floating-icon {
   position: absolute;
   width: 180px;
   animation: float 6s ease-in-out infinite;
-  z-index: 3; /* above stars and form */
+  z-index: 3;
 }
 
 .bubble {
@@ -67,35 +67,62 @@
   100% { transform: translateY(0); }
 }
 
-/* Form */
+/* Scrollable Form Container */
 .form-container {
   z-index: 2;
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid #ff4ccf;
   border-radius: 25px;
-  padding: 50px 40px;
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center contents horizontally */
   text-align: center;
   box-shadow: 0 0 25px #ff4ccf;
   backdrop-filter: blur(15px);
   max-width: 450px;
+  max-height: 80vh;
+  overflow-y: auto; /* Only vertical scroll */
+  overflow-x: hidden; /* Prevent horizontal scroll */
   animation: fadeIn 1.5s ease-in-out;
 }
 
+/* Scrollbar (vertical only) */
+.form-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.form-container::-webkit-scrollbar-track {
+  background: rgba(26, 0, 31, 0.3);
+  border-radius: 10px;
+}
+
+.form-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #ff4ccf, #7b2ff7);
+  border-radius: 10px;
+}
+
+.form-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #ff6bcc, #9b59b6);
+}
+
+/* Fade in */
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* Labels and input */
+/* Labels and Input */
 .input-label {
   font-size: 1.5rem;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   color: #ffccff;
   text-shadow: 0 0 6px #ff4ccf;
 }
 
 .name-input {
   width: 100%;
+  max-width: 300px;
   padding: 12px;
   border-radius: 10px;
   border: 2px solid #7b2ff7;
@@ -112,7 +139,7 @@
   box-shadow: 0 0 10px #ff4ccf, inset 0 0 8px #ff4ccf;
 }
 
-/* Gender buttons */
+/* Gender Buttons */
 .gender-container {
   display: flex;
   justify-content: center;
@@ -138,23 +165,27 @@
   box-shadow: 0 0 10px #ff4ccf;
 }
 
-/* Continue button */
+/* Continue Button */
 .continue-btn {
-  padding: 14px 36px;
+  padding: 12px 36px;
   border: none;
-  border-radius: 14px;
+  border-radius: 50px;
   background: linear-gradient(45deg, #6a5acd, #836fff);
   color: white;
   cursor: pointer;
   font-size: 1rem;
   transition: all 0.3s ease-in-out;
   box-shadow: 0 0 8px #836fff;
+  margin: 20px auto 0 auto;
+  display: block;
 }
 
 .continue-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 0 15px #836fff;
 }
+
+/* Traits Toggle Button */
 .traits-toggle-btn {
   background: linear-gradient(45deg, #667eea, #764ba2);
   color: white;
@@ -173,6 +204,7 @@
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
+/* Traits Section */
 .traits-section {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 15px;
@@ -180,14 +212,9 @@
   margin: 15px 0;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  animation: fadeIn 0.3s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
+/* Moon Sign */
 .moon-sign-container {
   margin-bottom: 20px;
 }
@@ -202,6 +229,7 @@
 
 .moon-sign-select {
   width: 100%;
+  max-width: 300px;
   padding: 12px 16px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -216,6 +244,7 @@
   color: #fff;
 }
 
+/* Personality Traits */
 .personality-container {
   margin-top: 20px;
 }
@@ -241,7 +270,6 @@
 
 .trait-btn:hover {
   background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
 }
 
 .trait-btn.selected {
@@ -250,14 +278,18 @@
   box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
 }
 
+/* Custom Trait Input */
 .custom-trait-container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 10px;
   margin-bottom: 15px;
 }
 
 .custom-trait-input {
-  flex: 1;
+  width: 100%;
+  max-width: 300px;
   padding: 10px 15px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -287,20 +319,17 @@
   box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
 }
 
+/* Selected Traits Display */
 .selected-traits {
   margin-top: 15px;
-}
-
-.selected-traits p {
-  color: #fff;
-  font-size: 14px;
-  margin-bottom: 10px;
+  text-align: center;
 }
 
 .selected-traits-list {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  justify-content: center;
 }
 
 .selected-trait {

@@ -16,7 +16,7 @@ def get_ai_response(user_message: str) -> str:
         print(f"Available models: {available_models}")
 
         # Try different model names
-        model_names = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro', 'models/gemini-pro']
+        model_names = ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-pro', 'models/gemini-pro']
 
         model = None
         for model_name in model_names:
@@ -61,20 +61,5 @@ def test_gemini_connection():
         print(f"Gemini connection failed: {e}")
         return False
 
-# from openai import OpenAI
-# from app.config import OPENAI_API_KEY
-
-# client = OpenAI(api_key=OPENAI_API_KEY)
-
-# def get_ai_response(user_message: str) -> str:
-#     response = client.chat.completions.create(
-#         model="gpt-4o-mini",   # or "gpt-4o" if available
-#         messages=[
-#             {"role": "system", "content": "You are a friendly AI talking avatar named as CompaniO."},
-#             {"role": "user", "content": user_message}
-#         ]
-#     )
-
-#     return response.choices[0].message.content
 
 

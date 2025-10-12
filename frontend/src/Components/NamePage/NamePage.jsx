@@ -14,20 +14,18 @@ const NamePage = () => {
 
   const navigate = useNavigate();
 
-  // Predefined personality traits
   const availableTraits = [
     "Friendly", "Adventurous", "Creative", "Calm", "Energetic",
     "Romantic", "Intellectual", "Funny", "Caring", "Confident",
     "Mysterious", "Playful", "Wise", "Ambitious", "Loyal"
   ];
 
-  // Moon signs
   const moonSigns = [
     "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
     "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
   ];
 
-  // Star background effect
+  // Star background
   useEffect(() => {
     const starsContainer = document.querySelector(".stars");
     if (!starsContainer) return;
@@ -53,7 +51,6 @@ const NamePage = () => {
     }
   }, []);
 
-  // Handle trait selection
   const toggleTrait = (trait) => {
     setPersonalityTraits(prev =>
       prev.includes(trait)
@@ -62,7 +59,6 @@ const NamePage = () => {
     );
   };
 
-  // Add custom trait
   const addCustomTrait = () => {
     if (customTrait.trim() && !personalityTraits.includes(customTrait.trim())) {
       setPersonalityTraits(prev => [...prev, customTrait.trim()]);
@@ -70,7 +66,6 @@ const NamePage = () => {
     }
   };
 
-  // Continue button logic
   const handleContinue = () => {
     if (!companionName.trim()) {
       alert("Please enter your companion's name");
@@ -93,18 +88,15 @@ const NamePage = () => {
 
   return (
     <div className="namepage-container">
-      {/* Stars background */}
       <div className="stars"></div>
 
-      {/* Floating Images */}
       <img src={bubblemsg2} alt="Chat Bubble" className="floating-icon bubble" />
       <img src={robo2} alt="Robot" className="floating-icon robot" />
 
-      {/* Form Section */}
+      {/* Scrollable form box */}
       <div className="form-container">
         <h2 className="input-label">Create Your AI Companion</h2>
 
-        {/* Name Input */}
         <input
           type="text"
           placeholder="Enter companion name"
@@ -113,7 +105,6 @@ const NamePage = () => {
           onChange={(e) => setCompanionName(e.target.value)}
         />
 
-        {/* Gender Selection */}
         <div className="gender-container">
           <button
             type="button"
@@ -131,7 +122,6 @@ const NamePage = () => {
           </button>
         </div>
 
-        {/* Optional Personality Section Toggle */}
         <button
           type="button"
           className="traits-toggle-btn"
@@ -142,7 +132,6 @@ const NamePage = () => {
 
         {showTraits && (
           <div className="traits-section">
-            {/* Moon Sign Selection */}
             <div className="moon-sign-container">
               <label className="trait-label">Moon Sign (Optional):</label>
               <select
@@ -157,7 +146,6 @@ const NamePage = () => {
               </select>
             </div>
 
-            {/* Personality Traits */}
             <div className="personality-container">
               <label className="trait-label">Personality Traits:</label>
               <div className="traits-grid">
@@ -173,7 +161,6 @@ const NamePage = () => {
                 ))}
               </div>
 
-              {/* Custom trait input */}
               <div className="custom-trait-container">
                 <input
                   type="text"
@@ -183,16 +170,11 @@ const NamePage = () => {
                   onChange={(e) => setCustomTrait(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && addCustomTrait()}
                 />
-                <button
-                  type="button"
-                  className="add-trait-btn"
-                  onClick={addCustomTrait}
-                >
+                <button type="button" className="add-trait-btn" onClick={addCustomTrait}>
                   Add
                 </button>
               </div>
 
-              {/* Selected traits display */}
               {personalityTraits.length > 0 && (
                 <div className="selected-traits">
                   <p>Selected traits:</p>

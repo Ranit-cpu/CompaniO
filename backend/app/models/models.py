@@ -32,7 +32,7 @@ class Avatar(SQLModel, table=True):
     name: Optional[str] = None  # e.g., Mom, Best Friend
     relationship_to_user: Optional[str] = None  # mother, friend, sibling, etc.
     photo_asset: Optional[str] = Field(default=None, foreign_key="asset.id")
-    model_asset: Optional[str] = Field(default=None, foreign_key="asset.id")
+    avatar_model_asset: Optional[str] = Field(default=None, foreign_key="asset.id")
     asset_id: Optional[str] = Field(default=None, foreign_key="asset.id")
     status: str = "pending"  # pending | ready | failed
     generated_assets: Optional[str] = None

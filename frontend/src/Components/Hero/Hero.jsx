@@ -74,13 +74,17 @@ const Hero = ({ isAuthenticated, setActiveModal, onAuthSuccess }) => {
   };
 
   const handleAuthSuccess = (realToken) => {
-  if (realToken && realToken !== "dummyToken") {
+    if (realToken && realToken !== "dummyToken") {
       localStorage.setItem("token", realToken);
-      setIsAuthenticated(true);
-      setActiveModal(null);
-      navigate("/namepage"); // ✅ move redirect here
+      setShowSignIn(false);
+
+      if (onAuthSuccess) {
+        onAuthSuccess(realToken);
+      }
+      navigate("/namepage");
     } else {
-      console.error("Invalid token provided");
+      console.error("Authentication failed - no valid token received");
+      alert("Authentication failed. Please try again.");
     }
   };
 

@@ -47,8 +47,8 @@ const Header = () => {
         {/* Navigation */}
         <nav className="nav-links">
           <Link to="/" className="nav-btn">Home</Link>
-          <Link to="/about" className="nav-btn">About Us</Link>
-          <Link to="/know-more" className="nav-btn">Know More</Link>
+          <Link to="/know-more" className="nav-btn">About Us</Link>
+          <Link to="/about" className="nav-btn">Know More</Link>
         </nav>
 
         {/* Auth/Profile */}

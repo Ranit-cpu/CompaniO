@@ -513,17 +513,17 @@
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 8px;
   }
-  
+
   .trait-btn {
     font-size: 11px;
     padding: 6px 12px;
   }
-  
+
   .personality-badge {
     font-size: 10px;
     padding: 1px 6px;
   }
-  
+
   .emoji-picker-container {
     right: 10px;
     bottom: 60px;
