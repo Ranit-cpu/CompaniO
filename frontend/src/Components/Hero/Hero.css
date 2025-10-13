@@ -1,240 +1,150 @@
-body {
-  margin: 0;
-  font-family: "Poppins";
-  /* background: linear-gradient(-45deg, #000000,#1b0236, #000000, #2d2003,#000000); */
-  background: radial-gradient(circle at center, #1a001f 0%, #000000 100%);
-    /* background: linear-gradient(-45deg, #1f1c2c, #928dab, #1f1c2c, #928dab); */
-  background-size: 400% 400%;
-  animation: gradientBG 10s ease infinite;
-  color: white;
-}
-
-/* Background animation */
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-
+/* Fullscreen Hero Container */
 .hero {
   position: relative;
-  height: 100vh;
   width: 100%;
+  height: 100vh;
   overflow: hidden;
+  background: radial-gradient(circle at center, #1a001f 0%, #000000 100%);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  color: white;
+  perspective: 800px;
+  animation: fadeIn 1.5s ease-in-out;
 }
 
+/* Animated Background Stars */
 .hero-stars {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* Push behind content */
-  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .star {
   position: absolute;
-  top: var(--y0);
-  left: var(--x0);
   width: 2px;
   height: 2px;
   background: white;
   border-radius: 50%;
-  animation: moveStar linear infinite;
+  opacity: 0.6;
+  animation: twinkle 2s infinite ease-in-out alternate, moveStar linear infinite;
 }
 
-.hero-bg-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.5); }
 }
 
+@keyframes moveStar {
+  0% { transform: translate3d(var(--x0,0px), var(--y0,0px), 0); }
+  100% { transform: translate3d(var(--x1,0px), var(--y1,0px), 0); }
+}
+
+/* Hero Content Box (Glassmorphic Card) */
 .hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid #ff4ccf;
+  border-radius: 25px;
+  padding: 50px 40px;
   text-align: center;
-  color: white; /* adjust depending on model colors */
-  padding: 2rem;
-}
-
-.hero-text {
+  box-shadow: 0 0 25px #ff4ccf;
+  backdrop-filter: blur(15px);
   max-width: 600px;
+  animation: fadeIn 1.2s ease-in-out;
 }
 
-.hero h1 {
+/* Title */
+.hero-content h1 {
+  font-family: 'Orbitron', sans-serif;
   font-size: 3rem;
-  margin-bottom: 20px;
-  animation: fadeInDown 1.5s ease;
+  font-weight: 600;
+  color: #eed63e;
+  margin-bottom: 1.2rem;
+  text-shadow: 0 0 6px rgba(0, 242, 254, 0.4),
+               0 0 12px rgba(255, 66, 158, 0.4);
 }
 
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-  animation: fadeIn 2s ease;
-  font-weight: 100;
+/* Description Text */
+.hero-content p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #f4f4f4;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 4px rgba(0, 170, 255, 0.3);
 }
 
+/* Hero Button */
 .btn1 {
-  display: inline-block;
-  /* background: linear-gradient(to right, #ff5f6d, #ffc371); */
-  background: linear-gradient(to right, #3e346b,#6e284a,#0000);
- box-shadow: 3px 3px 3px white;
- border: none;
+  padding: 12px 36px;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(45deg, #6a5acd, #836fff);
   color: white;
-  padding: 12px 25px;
-  font-size: 1rem;
-  border-radius: 30px;
-  text-decoration: none;
-  animation: fadeInUp 2s ease;
-  transition: transform 0.2s;
   cursor: pointer;
-  font-weight: 200;
+  font-size: 1rem;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 8px #836fff;
+  margin-top: 10px;
 }
 
 .btn1:hover {
   transform: scale(1.05);
+  box-shadow: 0 0 15px #836fff;
 }
 
-/* Floating image */
+/* Floating Hero Image (Optional) */
 .hero-img {
-  max-width: 400px;
-  animation: float 4s ease-in-out infinite;
+  position: absolute;
+  width: 220px;
+  animation: float 6s ease-in-out infinite;
+  z-index: 3;
 }
 
-@keyframes moveStar {
-  from {
-    transform: translate(0, 0) scale(1);
-  }
-  to {
-    transform: translate(calc(var(--x1) - var(--x0)), calc(var(--y1) - var(--y0))) scale(0.5);
-  }
+.hero-img.left {
+  left: 5%;
+  top: 20%;
+}
+
+.hero-img.right {
+  right: 5%;
+  bottom: 15%;
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-15px); }
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
 }
 
-/* Fade animations */
+/* Fade In Animation */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
+/* Responsive Design */
 @media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    text-align: center;
+  .hero-content {
+    padding: 30px 20px;
+    max-width: 90%;
   }
+
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
   .hero-img {
-  max-width: 100%;
-  height: auto;
-  animation: float 4s ease-in-out infinite;
-}
-
-}
-/* Modal Overlay Styles */
-/* .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  backdrop-filter: blur(5px);
-}
-
-.modal-content {
-  position: relative;
-  max-width: 450px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-} */
-/* ::-webkit-scrollbar {
-  display: none;
-} */
-/* html {
-  scrollbar-width: none;
-} */
-
-/* .modal-overlay .page-container {
-  margin: 0;
-  padding: 0;
-  background: transparent;
-  min-height: auto;
-} */
-
-/* Close button styles */
-.close-btn {
-  position: absolute !important;
-  top: 15px !important;
-  right: 20px !important;
-  background: none !important;
-  border: none !important;
-  font-size: 28px !important;
-  cursor: pointer !important;
-  color: #999 !important;
-  z-index: 10;
-  line-height: 1;
-  padding: 0 !important;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease;
-}
-
-.close-btn:hover {
-  color: #666 !important;
-  transform: scale(1.1);
-}
-
-
-/* Hero Section Text */
-.hero-text h1 {
-  font-family: 'Orbitron', sans-serif; /* Techy futuristic font */
-  font-size: 3rem;
-  font-weight: 600;
-  color: #eed63e; /* base white */
-  text-shadow: 0 0 6px rgba(0, 242, 254, 0.4), 
-               0 0 12px rgba(255, 66, 158, 0.4); /* softer glow */
-  margin-bottom: 1rem;
-  transition: all 0.3s ease-in-out;
-}
-
-/* Tagline under Virtual Companion */
-.hero-text p {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 600; /* made bold */
-  color: #fcfcfc; /* soft bluish tone matching theme */
-  margin-bottom: 1.5rem;
-  text-shadow: 0 0 4px rgba(0, 170, 255, 0.3); /* subtle glow */
+    display: none;
+  }
 }

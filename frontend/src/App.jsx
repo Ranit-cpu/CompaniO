@@ -9,6 +9,7 @@ import NamePage from './Components/NamePage/NamePage';
 import About from './Components/About/About';
 import Chat from './Components/Chat/Chat';
 import VideoCall from "./Components/VideoCall/VideoCall";
+import KnowMore from './Components/KnowMore/KnowMore';
 
 function AppContent() {
   const [activeModal, setActiveModal] = useState(null);
@@ -57,32 +58,36 @@ function AppContent() {
       )}
 
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              setActiveModal={setActiveModal}
-              isAuthenticated={isAuthenticated}
-              onAuthSuccess={handleAuthSuccess}
-            />
-          }
-        />
-        <Route path="/upload" element={<Upload />} />
-        <Route
-          path="/namepage"
-          element={
-            isAuthenticated ? <NamePage /> : <Home setActiveModal={setActiveModal} />
-          }
-        />
-        <Route path="/about" element={<About />} />
-        <Route
-          path="/chat"
-          element={
-            isAuthenticated ? <Chat /> : <Home setActiveModal={setActiveModal} />
-          }
-        />
-        <Route path="/video-call" element={<VideoCall />} />
-      </Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                setActiveModal={setActiveModal}
+                isAuthenticated={isAuthenticated}
+                onAuthSuccess={handleAuthSuccess}
+              />
+            }
+          />
+          <Route path="/upload" element={<Upload />} />
+          <Route
+            path="/namepage"
+            element={
+              isAuthenticated ? <NamePage /> : <Home setActiveModal={setActiveModal} />
+            }
+          />
+
+          {/* 🔄 Swapped routes */}
+          <Route path="/know-more" element={<KnowMore />} />
+          <Route path="/about" element={<About />} />
+
+          <Route
+            path="/chat"
+            element={
+              isAuthenticated ? <Chat /> : <Home setActiveModal={setActiveModal} />
+            }
+          />
+          <Route path="/video-call" element={<VideoCall />} />
+        </Routes>
 
       {activeModal && (
         <SignIn

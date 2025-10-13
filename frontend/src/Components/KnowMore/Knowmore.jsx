@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from "react";
-import "./About.css";
+import "./knowmore.css";
 import robo2 from "../../assets/robo2.png";
 import bubblemsg2 from "../../assets/bubblemsg2.png";
 
