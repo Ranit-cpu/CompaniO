@@ -1,6 +1,6 @@
-import { useLocation, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useRef } from "react";
 import { Mic, MicOff, Video, VideoOff, PhoneOff } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./VideoCall.css";
 
 export default function VideoCall() {
@@ -8,111 +8,99 @@ export default function VideoCall() {
   const navigate = useNavigate();
   const { companionName, companionGender, uploadedPhoto } = location.state || {};
 
-  const [isAudioEnabled, setIsAudioEnabled] = useState(true);
+  const [isRecording, setIsRecording] = useState(false);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
   const [seconds, setSeconds] = useState(0);
-  const [listening, setListening] = useState(false);
-  const [userTranscript, setUserTranscript] = useState("");
-  const [aiReply, setAiReply] = useState("");
   const [status, setStatus] = useState("Connected");
+  const [aiReply, setAiReply] = useState("");
+  const [userTranscript, setUserTranscript] = useState("");
+  const mediaRecorderRef = useRef(null);
+  const audioChunks = useRef([]);
   const audioRef = useRef(null);
 
-  // 🎬 Start timer on mount
+  // Timer
   useEffect(() => {
     const timer = setInterval(() => setSeconds((s) => s + 1), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  // Format timer as MM:SS
   const formatTime = (t) =>
     `${String(Math.floor(t / 60)).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`;
 
-  // 🎤 Setup SpeechRecognition
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognitionRef = useRef(null);
+  // 🎙️ Start/Stop recording
+  const toggleRecording = async () => {
+    if (isRecording) {
+      // Stop recording
+      mediaRecorderRef.current?.stop();
+      setIsRecording(false);
+      setStatus("Processing...");
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-  useEffect(() => {
-    if (SpeechRecognition) {
-      const rec = new SpeechRecognition();
-      rec.lang = "en-US";
-      rec.interimResults = false;
-      rec.maxAlternatives = 1;
+        // Pick a MIME type that is widely supported
+        const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+          ? "audio/webm; codecs=opus"
+          : "audio/webm";
 
-      rec.onstart = () => {
-        setListening(true);
+        const mediaRecorder = new MediaRecorder(stream, { mimeType });
+        mediaRecorderRef.current = mediaRecorder;
+        audioChunks.current = [];
+
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            audioChunks.current.push(event.data);
+          }
+        };
+
+        mediaRecorder.onstop = async () => {
+          if (audioChunks.current.length === 0) {
+            console.error("⚠️ Empty recording detected");
+            setStatus("Recording failed, try again");
+            return;
+          }
+
+          const audioBlob = new Blob(audioChunks.current, { type: mimeType });
+          console.log("🎧 Recorded Blob Size:", audioBlob.size);
+
+          await sendAudioToBackend(audioBlob);
+        };
+
+        mediaRecorder.start();
+        setIsRecording(true);
         setStatus("Listening...");
-      };
-      rec.onresult = (e) => {
-        const text = e.results[0][0].transcript;
-        setUserTranscript(text);
-        sendToAI(text);
-      };
-      rec.onerror = (e) => {
-        console.error("SpeechRecognition error:", e);
-        setStatus("Mic error");
-        setListening(false);
-      };
-      rec.onend = () => setListening(false);
-      recognitionRef.current = rec;
-    } else {
-      setStatus("SpeechRecognition not supported");
-    }
-  }, []);
-
-  // 🎙️ Start & stop mic
-  const toggleListening = () => {
-    if (!recognitionRef.current) return;
-    if (listening) {
-      recognitionRef.current.stop();
-    } else {
-      recognitionRef.current.start();
+      } catch (err) {
+        console.error("🎤 Mic error:", err);
+        setStatus("Mic access denied");
+      }
     }
   };
 
-  // 🚀 Send user text to AI backend and play reply
-  const sendToAI = async (text) => {
-    setStatus("Thinking...");
+  // 🚀 Send audio to backend
+  const sendAudioToBackend = async (audioBlob) => {
     try {
-      const res = await fetch("http://localhost:8000/api/ai/respond", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      });
-      const data = await res.json();
-      setAiReply(data.text);
-      setStatus("Speaking...");
+      const formData = new FormData();
+      formData.append("file", audioBlob, "user_audio.webm");
 
-      if (data.audio_base64) {
-        const audioBlob = base64ToBlob(data.audio_base64, "audio/mpeg");
-        const url = URL.createObjectURL(audioBlob);
-        if (audioRef.current) {
-          audioRef.current.src = url;
-          await audioRef.current.play();
-        } else {
-          const a = new Audio(url);
-          await a.play();
-        }
+      const res = await fetch("http://localhost:8000/api/ai/voice", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+
+      const audioURL = URL.createObjectURL(await res.blob());
+      if (audioRef.current) {
+        audioRef.current.src = audioURL;
+        await audioRef.current.play();
       }
+
       setStatus("Connected");
+      setAiReply("🎧 AI is speaking...");
     } catch (err) {
-      console.error(err);
+      console.error("Error sending audio:", err);
       setStatus("Error communicating with AI");
     }
-  };
-
-  // Utility: base64 → Blob
-  const base64ToBlob = (b64Data, contentType = "", sliceSize = 512) => {
-    const byteCharacters = atob(b64Data);
-    const byteArrays = [];
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      const slice = byteCharacters.slice(offset, offset + sliceSize);
-      const byteNumbers = new Array(slice.length);
-      for (let i = 0; i < slice.length; i++) byteNumbers[i] = slice.charCodeAt(i);
-      const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-    }
-    return new Blob(byteArrays, { type: contentType });
   };
 
   const endCall = () => navigate(-1);
@@ -129,7 +117,7 @@ export default function VideoCall() {
       </div>
 
       <div className="video-call-content">
-        {/* Avatar / Video Display */}
+        {/* Avatar */}
         {uploadedPhoto ? (
           <img src={uploadedPhoto} alt={companionName} className="video-avatar" />
         ) : (
@@ -150,27 +138,20 @@ export default function VideoCall() {
           </div>
         )}
 
-        {/* AI Text Reply Section */}
+        {/* Chat bubbles */}
         <div className="ai-chat-bubble">
-          <strong>You:</strong> {userTranscript || <i>Say something...</i>}
+          <strong>You:</strong> {isRecording ? "🎤 Recording..." : userTranscript || "Say something..."}
           <br />
-          <strong>CompaniO:</strong> {aiReply || <i>Listening...</i>}
+          <strong>{companionName || "CompaniO"}</strong> {aiReply || "Waiting for input..."}
         </div>
 
         {/* Controls */}
         <div className="video-controls">
           <button
-            className={`control-btn ${isAudioEnabled ? "active" : "inactive"}`}
-            onClick={() => {
-              setIsAudioEnabled(!isAudioEnabled);
-              toggleListening();
-            }}
+            className={`control-btn ${isRecording ? "active" : "inactive"}`}
+            onClick={toggleRecording}
           >
-            {isAudioEnabled && listening ? (
-              <MicOff size={24} />
-            ) : (
-              <Mic size={24} />
-            )}
+            {isRecording ? <MicOff size={24} /> : <Mic size={24} />}
           </button>
 
           <button
