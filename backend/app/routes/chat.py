@@ -1,7 +1,7 @@
 import httpx
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends, Query, HTTPException, status
 from sqlmodel import Session
-from typing import Dict, Set
+from typing import Dict, Set, Optional
 import json
 from datetime import datetime
 
@@ -104,8 +104,39 @@ async def get_ai_response(user_text: str, session_id: str) -> str:
         print(f"Error calling AI endpoint: {e}")
         return "I'm having trouble responding right now."
 
+# Optional: Add a simple token verification function
+async def verify_ws_token(token: Optional[str] = Query(None)):
+    """
+    Verify WebSocket connection token.
+    If you don't need auth, just return True.
+    """
+    # For now, allow all connections (remove auth requirement)
+    # You can add proper token verification later
+    return True
+    
+    # If you want to enforce auth, uncomment below:
+    # if not token:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_403_FORBIDDEN,
+    #         detail="No authentication token provided"
+    #     )
+    # # Add your token verification logic here
+    # return True
+
 @router.websocket("/ws/sessions/{session_id}")
-async def session_ws(websocket: WebSocket, session_id: str, db: Session = Depends(get_session)):
+async def session_ws(
+    websocket: WebSocket, 
+    session_id: str,
+    token: Optional[str] = Query(None),  # Accept token as query param
+    db: Session = Depends(get_session)
+):
+    # Verify authentication (currently allows all)
+    try:
+        await verify_ws_token(token)
+    except HTTPException:
+        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        return
+    
     await connect_ws(session_id, websocket)
     try:
         while True:

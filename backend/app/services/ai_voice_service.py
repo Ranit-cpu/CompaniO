@@ -11,6 +11,20 @@ from pydub import AudioSegment
 
 router = APIRouter()
 
+# --- SET FFMPEG PATH (ADD THIS SECTION) ---
+FFMPEG_PATH = r"C:\ffmpeg\bin\ffmpeg.exe"
+FFPROBE_PATH = r"C:\ffmpeg\bin\ffprobe.exe"
+
+# Check if FFmpeg exists and set it
+if os.path.exists(FFMPEG_PATH):
+    AudioSegment.converter = FFMPEG_PATH
+    AudioSegment.ffprobe = FFPROBE_PATH
+    logging.info(f"✅ FFmpeg found at: {FFMPEG_PATH}")
+else:
+    logging.warning(f"⚠️ FFmpeg not found at: {FFMPEG_PATH}")
+    logging.warning("Please download FFmpeg from: https://www.gyan.dev/ffmpeg/builds/")
+# --- END FFMPEG CONFIGURATION ---
+
 # --- Configure Gemini API ---
 if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY is not set. Check your .env file.")
@@ -28,15 +42,19 @@ def convert_to_wav(input_path: str, output_path: str):
         audio = AudioSegment.from_file(input_path, format="webm")
         audio = audio.set_channels(1).set_frame_rate(16000)
         audio.export(output_path, format="wav")
+        print(f"✅ Conversion successful!")
     except Exception as e:
         print(f"⚠️ Primary conversion failed: {e}")
         print("🔁 Trying fallback ffmpeg command...")
         try:
+            # Use full path for fallback too
+            ffmpeg_exe = FFMPEG_PATH if os.path.exists(FFMPEG_PATH) else "ffmpeg"
             cmd = [
-                "ffmpeg", "-y", "-i", input_path,
+                ffmpeg_exe, "-y", "-i", input_path,
                 "-ac", "1", "-ar", "16000", output_path
             ]
-            subprocess.run(cmd, check=True)
+            subprocess.run(cmd, check=True, capture_output=True)
+            print(f"✅ Fallback conversion successful!")
         except Exception as inner:
             print(f"❌ Fallback ffmpeg failed: {inner}")
             raise
